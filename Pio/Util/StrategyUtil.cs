@@ -16,12 +16,12 @@ public static class StrategyUtil
 
     public static List<String> GetStrategies(SolverConnection solver, string nodeString)
     {
-        var result = solver.GetResponseFromSolver("show_strategy_pp " + "r:0:c").ToList();
+        var result = solver.GetResponseFromSolver("show_strategy_pp " + nodeString).ToList();
         return result;
 
     }
 
 
-    
+
 
 }

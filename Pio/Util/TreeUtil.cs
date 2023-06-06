@@ -1,10 +1,4 @@
-﻿using Client.Util;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Poker.Pio.Connection;
+﻿using Poker.Pio.Connection;
 
 namespace Client.Util
 {

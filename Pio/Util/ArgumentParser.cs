@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Client.Util
+﻿namespace Client.Util
 {
     /// <summary>
     /// Parsed command line arguments

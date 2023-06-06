@@ -1,17 +1,15 @@
-﻿using System.Drawing;
-
-namespace Poker.Infrastructure.Models
+﻿namespace Poker.Infrastructure.Models
 {
     public class HandRange
     {
         public HandRange()
         {
-            
+
         }
-        public HandRange(string bettingPattern, decimal size,string? path, string ranges)
+        public HandRange(string bettingPattern, decimal size, string? path, string ranges)
         {
             RangesText = ranges;
-            Frequencies = ranges.Substring(0,1) == "[" ? CreateFrequenciesForCarrots(ranges): CreateFrequenciesForGtoWizard(ranges);
+            Frequencies = ranges.Substring(0, 1) == "[" ? CreateFrequenciesForCarrots(ranges) : CreateFrequenciesForGtoWizard(ranges);
             BetSize = size;
             BettingPattern = bettingPattern;
             Path = path;
@@ -38,9 +36,9 @@ namespace Poker.Infrastructure.Models
             foreach (var group in groups)
             {
 
-                var valueString = group.Substring(0,1) != "["
+                var valueString = group.Substring(0, 1) != "["
                     ? "100"
-                    :@group.Substring(5,1) == "]" ? @group.Substring(1, 4) : @group.Substring(1, 5);
+                    : @group.Substring(5, 1) == "]" ? @group.Substring(1, 4) : @group.Substring(1, 5);
 
                 var value = Decimal.Parse(valueString);
                 value /= 100;
@@ -67,7 +65,7 @@ namespace Poker.Infrastructure.Models
                 var arr = hand.Split(':');
                 var cards = arr[0];
                 var value = decimal.Parse(arr[1]);
-             var newFrequency = new Frequency(new Hand(cards), value);
+                var newFrequency = new Frequency(new Hand(cards), value);
                 output.Add(newFrequency);
             }
 

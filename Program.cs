@@ -1,16 +1,16 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Runtime.CompilerServices;using Poker.Infrastructure.HistoryBuilder;
+using Poker.Infrastructure.HistoryBuilder;
 using Poker.Infrastructure.Models;
 using Poker.Pio.Connection;
 
 var solver = new SolverConnection(@"C:\PioSolver\PioSOLVER2-pro.exe");
-var baseCFRLocation = @"C:\PioSolver\Saves\";
+var baseCFRLocation = @"W:";
 var handAmount = Console.ReadLine();
 
 for (var i = 0; i < int.Parse(handAmount); i++)
 {
-    var round = new Round(0.5m, 1, 1);
+    var round = new Round(0.25m, 0.5m, 0.5m);
     var preflopRound = new PreflopRound();
     var historyBuilder = new HistoryBuilder();
     historyBuilder.BuildHeader(round);
@@ -24,7 +24,7 @@ for (var i = 0; i < int.Parse(handAmount); i++)
     }
     catch (Exception e)
     {
-       continue;
+        continue;
     }
 
     switch (round.PlayersInHand.Count)
@@ -37,10 +37,10 @@ for (var i = 0; i < int.Parse(handAmount); i++)
             postflopRound.PlayPostflop(historyBuilder, solver);
             break;
         case > 2:
+            Console.WriteLine($"More than one Player:  {round.BettingPattern}");
             continue;
     }
     historyBuilder.SaveHistoryToFile("");
 
 
 }
-

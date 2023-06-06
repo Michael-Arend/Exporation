@@ -1,8 +1,6 @@
 ﻿using Client.Util;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Poker.Pio.Connection;
+using System.Text;
 
 namespace Client.Plugins
 {

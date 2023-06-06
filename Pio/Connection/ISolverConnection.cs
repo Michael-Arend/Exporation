@@ -1,6 +1,4 @@
-﻿using Client.Util;
-
-namespace Poker.Pio.Connection
+﻿namespace Poker.Pio.Connection
 {
     public interface ISolverConnection
     {

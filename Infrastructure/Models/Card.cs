@@ -143,7 +143,7 @@ public class Card
 
         }
 
-        return new Card ( value, color);
+        return new Card(value, color);
     }
 }
 
@@ -167,9 +167,9 @@ public enum CardValue
 public enum CardColor
 {
     S = 1,
-    C = 2,
+    H = 2,
     D = 3,
-    H = 4,
-  
-  
+    C = 4,
+
+
 }

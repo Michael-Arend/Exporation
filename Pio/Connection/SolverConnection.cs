@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using Client.Util;
 
 namespace Poker.Pio.Connection
 {
@@ -8,7 +7,7 @@ namespace Poker.Pio.Connection
     public class SolverConnection : ISolverConnection
     {
         public event SolverUtils.SolverLogMessage LogEvent;
-
+        
         public int SolverConnectionTimeoutInMiliseconds = 1000;
 
         public SolverConnection(string solverExecutablePath)
@@ -23,7 +22,7 @@ namespace Poker.Pio.Connection
             r.WaitForResponse();
             if (r.IsError)
             {
-                throw new SolverException(r.Request + r.ErrorMessage);
+                Console.WriteLine("Tree Not Found");
             }
             return r.Response;
         }

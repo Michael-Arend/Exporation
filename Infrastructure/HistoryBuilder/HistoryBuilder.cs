@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Poker.Infrastructure.Models;
 using System.Globalization;
-using System.Linq;
+using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
-using Poker.Infrastructure.Models;
 
 namespace Poker.Infrastructure.HistoryBuilder
 {
@@ -13,7 +10,7 @@ namespace Poker.Infrastructure.HistoryBuilder
         private StringBuilder builder;
         private string fileName;
 
-        public  HistoryBuilder()
+        public HistoryBuilder()
         {
             this.builder = new StringBuilder();
         }
@@ -35,32 +32,36 @@ namespace Poker.Infrastructure.HistoryBuilder
 
             var time = DateTime.Now;
             builder.AppendLine(
-                $"PokerStars Zoom Hand #{handString}:  Hold'em No Limit (${(round.BigBlind/2).ToString("0.00").Replace(",", ".")}/${(round.BigBlind).ToString("0.00").Replace(",", ".")}) - {time.Year}/{time.Month}/{time.Day} {time.Hour}:{time.Minute.ToString("00")}:{time.Second.ToString("00")} ET");
+                $"PokerStars Zoom Hand #{handString}:  Hold'em No Limit (${(round.BigBlind / 2).ToString("0.00").Replace(",", ".")}/${(round.BigBlind).ToString("0.00").Replace(",", ".")}) - {time.Year}/{time.Month}/{time.Day} {time.Hour}:{time.Minute.ToString("00")}:{time.Second.ToString("00")} ET");
             builder.AppendLine("Table 'Halley' 6-max Seat #6 is the button");
 
-         
+
             var seat = 1;
             foreach (var player in round.Players)
             {
-                builder.AppendLine($"Seat {seat}: {player.Name}(${player.Chips * round.Limit} in chips)");
+                builder.AppendLine($"Seat {seat}: {player.Name} (${(player.Chips * round.Limit).ToString("0.00").Replace(",", ".")} in chips)");
                 seat++;
             }
 
             var bb = round.Players.FirstOrDefault(x => x.Position == Position.BB);
             var sb = round.Players.FirstOrDefault(x => x.Position == Position.SB);
             var hero = round.Players.FirstOrDefault(x => x.Name == "HeroGto");
-            var heroCards = hero.Hand.GetStringFromHand().Insert(2," ");
-            builder.AppendLine($"{sb.Name}: posts small blind ${(round.Limit / 2).ToString(CultureInfo.InvariantCulture)}");
-            builder.AppendLine($"{bb.Name}: posts big blind ${round.Limit.ToString(CultureInfo.InvariantCulture)}");
-            builder.AppendLine("***HOLE CARDS***");
+            var heroCards = hero.Hand.GetStringFromHand().Insert(2, " ");
+            builder.AppendLine($"{sb.Name}: posts small blind ${(round.Limit / 2).ToString("0.00").Replace(",", ".")}");
+            builder.AppendLine($"{bb.Name}: posts big blind ${round.Limit.ToString("0.00").Replace(",", ".")}");
+            builder.AppendLine("*** HOLE CARDS ***");
             builder.AppendLine($"Dealt to {hero.Name} [{heroCards}]");
-            }
+        }
 
         public void SaveHistoryToFile(string location)
         {
+            var contents = "";
+            string path = @"C:\PioSolver\hh.txt"; // path to file
+            if (File.Exists(path))
+            {
+                contents = File.ReadAllText(path);
 
-            string path = @"C:\temp\hh.txt"; // path to file
-            string contents = File.ReadAllText(path);
+            }
 
             using (FileStream fs = File.Create(path))
             {
@@ -70,7 +71,7 @@ namespace Poker.Infrastructure.HistoryBuilder
                     builder.AppendLine();
                     builder.AppendLine();
                 }
-                byte[] info = new UTF8Encoding(true).GetBytes(builder.ToString()+ contents);
+                byte[] info = new UTF8Encoding(true).GetBytes(contents + builder.ToString());
                 fs.Write(info, 0, info.Length);
 
                 // writing data in bytes already
@@ -81,12 +82,18 @@ namespace Poker.Infrastructure.HistoryBuilder
 
         public void PlayerRaises(Player player, decimal difference, decimal overall, Round round)
         {
-            var overallString = (overall*round.BigBlind * round.Limit).ToString("0.00").Replace(",",".");
-            var differenceString = (difference * round.BigBlind * round.Limit).ToString("0.00").Replace(",", ".");
+            var overallString = (overall * round.BigBlind).ToString("0.00").Replace(",", ".");
+            var differenceString = (difference  * round.BigBlind).ToString("0.00").Replace(",", ".");
             builder.AppendLine($"{player.Name}: raises ${differenceString} to ${overallString}");
         }
 
-        public void PlayerCalls(Player player, decimal toCallAmount,Round round)
+        public void PlayerBets(Player player, decimal size, Round round)
+        {
+            var overallString = (size * round.BigBlind * round.Limit).ToString("0.00").Replace(",", ".");
+            builder.AppendLine($"{player.Name}: bets ${overallString}");
+        }
+
+        public void PlayerCalls(Player player, decimal toCallAmount, Round round)
         {
             var overallString = (toCallAmount * round.BigBlind * round.Limit).ToString("0.00").Replace(",", ".");
 
@@ -98,7 +105,15 @@ namespace Poker.Infrastructure.HistoryBuilder
             builder.AppendLine($"{player.Name}: folds");
         }
 
-        public void HandleWinNoShowdown(Player player, decimal returnAmount, Round round)
+
+
+
+        public void PlayerChecks(Player player)
+        {
+            builder.AppendLine($"{player.Name}: checks");
+        }
+
+        public void HandleWin(Player player, decimal returnAmount, Round round, Boolean withShowDown)
         {
             if (returnAmount > 0)
             {
@@ -106,31 +121,78 @@ namespace Poker.Infrastructure.HistoryBuilder
                 builder.AppendLine($"Uncalled bet (${returnString}) returned to {player.Name}");
             }
 
-            var potString = ((round.Pot- returnAmount) * round.BigBlind * round.Limit).ToString("0.00").Replace(",", ".");
+            var potString = ((round.Pot - returnAmount) * round.BigBlind * round.Limit).ToString("0.00").Replace(",", ".");
 
-               
+            if (withShowDown)
+            {
+                HandleWinShowdown(round.PlayersInHand.First(), round.PlayersInHand.Last(), round.Board, round);
+            }
+            else
+            {
                 builder.AppendLine($"{player.Name} collected ${potString} from pot");
-                builder.AppendLine($"{player.Name} doesn´t show hand");
-                builder.AppendLine("*** SUMMARY ***");
-                builder.AppendLine($"Total pot ${potString} | Rake $0 ");
+                builder.AppendLine($"{player.Name}: doesn´t show hand");
+            }
 
-                var seat = 1;
-                foreach (var p in round.Players)
+            builder.AppendLine("*** SUMMARY ***");
+            builder.AppendLine($"Total pot ${potString} | Rake $0 ");
+            if(round.Board.Any())
+            {
+                var boardString = "";
+                foreach (var card in round.Board)
                 {
-                    var posString = p.Position == Position.BTN ? "(button) " :
-                        p.Position == Position.SB ? "(small blind) " :
-                        p.Position == Position.BB ? "(big blind) " : "";
-
-                    var didNotBet = p.MaxStreetReached == Street.Preflop && p.ChipsInvestedInRound == 0
-                        ? " (didn´t bet)"
-                        : "";
-
-                    if (!p.PlayerInHand)
-                        builder.AppendLine($"Seat {seat}: {p.Name} {posString}folded {StreetToString(p.MaxStreetReached)}{didNotBet}");
-                    else if (p.Name == player.Name)
-                        builder.AppendLine($"Seat {seat}: {player.Name} {posString}collected ${potString}");
-                    seat++;
+                    boardString += " ";
+                    boardString += card.GetStringFromCard();
                 }
+                builder.AppendLine($"Board [{boardString.Substring(1)}]");
+            }
+            var seat = 1;
+            foreach (var p in round.Players)
+            {
+                var posString = p.Position == Position.BTN ? "(button) " :
+                    p.Position == Position.SB ? "(small blind) " :
+                    p.Position == Position.BB ? "(big blind) " : "";
+
+                var didNotBet = p.MaxStreetReached == Street.Preflop && p.ChipsInvestedInRound == 0
+                    ? " (didn´t bet)"
+                    : "";
+
+                if (!p.PlayerInHand)
+                    builder.AppendLine($"Seat {seat}: {p.Name} {posString}folded {StreetToString(p.MaxStreetReached)}{didNotBet}");
+                else if (p.Name == player.Name)
+                    builder.AppendLine($"Seat {seat}: {player.Name} {posString}collected ${potString}");
+                seat++;
+            }
+            builder.AppendLine();
+        }
+
+        private void HandleWinShowdown(Player playerOne, Player playerTwo, List<Card> board, Round round) 
+        {
+            var playerOneHand = board.ToList();
+            playerOneHand.AddRange(new List<Card> { playerOne.Hand.Card1, playerOne.Hand.Card2 });
+            var resultPlayer1 = new Result(playerOneHand);
+            var playerTwoHand = board.ToList();
+            playerTwoHand.AddRange(new List<Card> { playerTwo.Hand.Card1, playerTwo.Hand.Card2 });
+            var resultPlayer2 = new Result(playerTwoHand);
+            builder.AppendLine("*** SHOW DOWN ***");
+            builder.AppendLine($"{playerOne.Name}: shows [{playerOne.Hand.GetStringFromHand}] ({resultPlayer1.Message})");
+            builder.AppendLine($"{playerTwo.Name}: shows [{playerTwo.Hand.GetStringFromHand}] ({resultPlayer2.Message})");
+
+            if(resultPlayer1.Rating > resultPlayer2.Rating)
+            {
+                var potString = (round.Pot * round.BigBlind * round.Limit).ToString("0.00").Replace(",", ".");
+                builder.AppendLine($"{playerOne.Name} collected (${potString})");
+            }
+            if (resultPlayer1.Rating < resultPlayer2.Rating)
+            {
+                var potString = (round.Pot * round.BigBlind * round.Limit).ToString("0.00").Replace(",", ".");
+                builder.AppendLine($"{playerTwo.Name} collected (${potString})");
+            }
+            if (resultPlayer1.Rating == resultPlayer2.Rating)
+            {
+                var potString = (round.Pot/2 * round.BigBlind * round.Limit).ToString("0.00").Replace(",", ".");
+                builder.AppendLine($"{playerOne.Name} collected (${potString})");
+                builder.AppendLine($"{playerTwo.Name} collected (${potString})");
+            }
         }
 
 
@@ -149,10 +211,20 @@ namespace Poker.Infrastructure.HistoryBuilder
                 case Street.Showdown:
                     return "No Fold";
             }
-
             return "";
         }
-      
 
+        internal void HandleNewStreet(string street, List<Card> board)
+        {
+            var board1 = $"{board[0].GetStringFromCard()} {board[1].GetStringFromCard()} {board[2].GetStringFromCard()}"; 
+           
+            if (board.Count == 5) { board1 += $" {board[board.Count - 2].GetStringFromCard()}"; }
+
+            var board2 = board.Count == 3 ? "" : $"[{board.Last().GetStringFromCard()}]" ;
+
+                builder.AppendLine($"*** {street.ToUpper()} *** [{board1}] {board2}");
+           
+        }
+        
     }
 }

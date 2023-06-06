@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Poker.Infrastructure.Models
+﻿namespace Poker.Infrastructure.Models
 {
     public class Hand
     {
@@ -15,7 +9,7 @@ namespace Poker.Infrastructure.Models
         }
         public Hand(string handString)
         {
-            Card1 = Card.GetCardFromString(handString.Substring(0,2));
+            Card1 = Card.GetCardFromString(handString.Substring(0, 2));
             Card2 = Card.GetCardFromString(handString.Substring(2, 2));
         }
 
@@ -23,6 +17,24 @@ namespace Poker.Infrastructure.Models
         {
             return $"{Card1.GetStringFromCard()}{Card2.GetStringFromCard()}";
         }
+
+        public String GetStringFromHandSorted()
+        {
+            if (Card1.Value > Card2.Value)
+                return $"{Card1.GetStringFromCard()}{Card2.GetStringFromCard()}";
+
+            if (Card1.Value < Card2.Value)
+                return $"{Card2.GetStringFromCard()}{Card1.GetStringFromCard()}";
+
+            if (Card1.Color < Card2.Color)
+                return $"{Card1.GetStringFromCard()}{Card2.GetStringFromCard()}";
+
+            return $"{Card2.GetStringFromCard()}{Card1.GetStringFromCard()}";
+
+
+        }
+
+
 
         public String GetSortedStringFromHand()
         {
@@ -38,8 +50,15 @@ namespace Poker.Infrastructure.Models
 
         }
 
+        public Hand Convert(Dictionary<CardColor, CardColor> solverConversion)
+        {
+            var c1Color = solverConversion.GetValueOrDefault(Card1.Color);
+            var c2Color = solverConversion.GetValueOrDefault(Card2.Color);
 
-
+            var card1 = new Card(Card1.Value, c1Color == 0 ? Card1.Color : c1Color);
+            var card2 = new Card(Card2.Value, c2Color == 0 ? Card2.Color : c2Color);
+            return new Hand(card1, card2);
+        }
 
         public Card Card1 { get; set; }
         public Card Card2 { get; set; }
