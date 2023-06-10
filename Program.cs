@@ -3,17 +3,23 @@
 using Poker.Infrastructure.HistoryBuilder;
 using Poker.Infrastructure.Models;
 using Poker.Pio.Connection;
+using System.Diagnostics;
+using System.Timers;
 
 var solver = new SolverConnection(@"C:\PioSolver\PioSOLVER2-pro.exe");
-var baseCFRLocation = @"W:";
+var baseCFRLocation = @"V:";
 var handAmount = Console.ReadLine();
-
+var historyBuilder = new HistoryBuilder();
+Stopwatch sw = new Stopwatch();
+sw.Start();
 for (var i = 0; i < int.Parse(handAmount); i++)
 {
-    Console.WriteLine(i + 1);
+   if(i%100 == 0)
+    {
+        Console.WriteLine(sw.Elapsed.ToString());
+    }
     var round = new Round(0.25m, 0.5m);
     var preflopRound = new PreflopRound();
-    var historyBuilder = new HistoryBuilder();
     historyBuilder.BuildHeader(round);
     try
     {
@@ -22,6 +28,8 @@ for (var i = 0; i < int.Parse(handAmount); i++)
     catch (KeyNotFoundException e)
     {
         Console.WriteLine($"Betting Pattern not found: {e.Message}");
+        historyBuilder.Reset();
+        continue;
     }
     catch (Exception e)
     {
@@ -33,15 +41,26 @@ for (var i = 0; i < int.Parse(handAmount); i++)
         case 1:
             break;
         case 2:
-
-            var postflopRound = new PostflopRound(round, baseCFRLocation);
-            postflopRound.PlayPostflop(historyBuilder, solver);
-            break;
+            try
+            {
+                var postflopRound = new PostflopRound(round, baseCFRLocation);
+                postflopRound.PlayPostflop(historyBuilder, solver);
+                historyBuilder.SaveHistoryToFile("");
+                break;
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+            finally
+            {
+                historyBuilder.Reset();
+            }
         case > 2:
             Console.WriteLine($"More than one Player:  {round.BettingPattern}");
+            historyBuilder.Reset();
             continue;
     }
-    historyBuilder.SaveHistoryToFile("");
 
 
 }

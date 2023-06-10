@@ -3,6 +3,7 @@ using Poker.Infrastructure.Models;
 using System.Globalization;
 using System.Net.NetworkInformation;
 using System.Numerics;
+using System.Reflection.Emit;
 using System.Text;
 
 namespace Poker.Infrastructure.HistoryBuilder
@@ -26,11 +27,8 @@ namespace Poker.Infrastructure.HistoryBuilder
         public void BuildHeader(Round round)
         {
             var rdm = new Random();
-            var handString = "";
-            for (var i = 0; i < 13; i++)
-            {
-                handString += rdm.Next(0, 9).ToString();
-            }
+            var handString = rdm.Next(0, 10000000).ToString("D7");
+             handString += rdm.Next(0, 1000000).ToString("D6");
 
             var time = DateTime.Now;
             builder.AppendLine(

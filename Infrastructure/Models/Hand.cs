@@ -1,4 +1,6 @@
-﻿namespace Poker.Infrastructure.Models
+﻿using Poker.Infrastructure.Enums;
+
+namespace Poker.Infrastructure.Models
 {
     public class Hand
     {

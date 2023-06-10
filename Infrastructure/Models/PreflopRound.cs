@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Poker.Infrastructure.Enums;
 
 namespace Poker.Infrastructure.Models;
 

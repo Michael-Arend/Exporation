@@ -1,6 +1,6 @@
 ﻿using Poker.Infrastructure.Models;
 
-namespace Poker.Infrastructure.Data;
+namespace Poker.Data;
 
 public static class GtoWizardSimpleRanges
 

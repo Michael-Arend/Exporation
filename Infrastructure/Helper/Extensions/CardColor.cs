@@ -1,4 +1,5 @@
-﻿using Poker.Infrastructure.Models;
+﻿using Poker.Infrastructure.Enums;
+using Poker.Infrastructure.Models;
 
 namespace Poker.Infrastructure.Helper.Extensions
 {

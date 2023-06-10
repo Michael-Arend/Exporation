@@ -1,4 +1,5 @@
 ﻿using Client.Util;
+using Poker.Infrastructure.Enums;
 using Poker.Infrastructure.Helper.Extensions;
 using Poker.Pio.Connection;
 using System.IO;
@@ -86,6 +87,7 @@ public class PostflopRound
             {
                 Console.WriteLine($"Tree not Found: {treeFile + treeString + ".cfr"}");
                 SaveMissingSolves($"{treeFile + treeString + ".cfr"}");
+                throw new Exception();
             }
             _round.UpdateBettingPatternPostflop(decision);
 
