@@ -2,6 +2,7 @@
 using Poker.Infrastructure.Helper.Extensions;
 using Poker.Pio.Connection;
 using System.IO;
+using System.Text;
 
 namespace Poker.Infrastructure.Models;
 
@@ -23,30 +24,34 @@ public class PostflopRound
 
     public Round PlayPostflop(HistoryBuilder.HistoryBuilder builder, SolverConnection solver)
     {
-
-        PlayStreetPostFlop(solver, "flop", builder);
+        var returnAmount = 0m;
+        returnAmount = PlayStreetPostFlop(solver, "flop", builder);
         if (_round.PlayersInHand.Count > 1)
         {
 
-            PlayStreetPostFlop(solver, "turn", builder);
+           returnAmount =  PlayStreetPostFlop(solver, "turn", builder);
         }
         if (_round.PlayersInHand.Count > 1)
         {
-            PlayStreetPostFlop(solver, "river", builder);
+            returnAmount =  PlayStreetPostFlop(solver, "river", builder);
         }
-            builder.HandleWin(_round.PlayersInHand.First(), 0, _round, _round.PlayersInHand.Count >1);
+            builder.HandleWin(_round.PlayersInHand.First(), _round.PlayersInHand.Count > 1 ? 0 : returnAmount, _round, _round.PlayersInHand.Count >1);
         return _round;
     }
 
-    public void PlayStreetPostFlop(SolverConnection solver, string street, HistoryBuilder.HistoryBuilder builder)
+    public decimal PlayStreetPostFlop(SolverConnection solver, string street, HistoryBuilder.HistoryBuilder builder)
     {
         _round.NextBoardCards();
         builder.HandleNewStreet(street, _round.Board);
-
+        if (_round.PlayersInHand.Any(x => x.Chips == 0))
+        {
+            return 0;
+        }
+        var treeString = "";
         if (_round.Board.Count == 3)
         {
             CreateSolverConversion(_round.Board);
-            var treeString = GetTreeString(_round.Board);
+             treeString = GetTreeString(_round.Board);
             // update Convert pattern to pio
             try
             {
@@ -55,7 +60,7 @@ public class PostflopRound
             }
             catch (Exception)
             {
-                Console.WriteLine($"Tree not Found: {treeFile + treeString + ".cfr"}");
+                Console.WriteLine($"Tree not Found: {treeFile + GetTreeString(_round.Board) + ".cfr"}");
             }
         }
         else
@@ -68,18 +73,25 @@ public class PostflopRound
         var streetEnded = false;
         var checkedCount = 0;
         var toCallAmount = 0m;
+        var latestRaiseAmount = 0.5m;
         while (!streetEnded)
         {
-            if(_round.PlayersInHand.Any(x=> x.Chips == 0))
+        
+            var decision = new Decision(DecisionKind.Fold,0);
+            try
             {
-                streetEnded = true;
-                continue;
+                decision = _round.PlayerToAct.MakePostFlopPlay(solver, ref nodeString, solverConversion, toCallAmount > 0);
             }
-            var decision = _round.PlayerToAct.MakePostFlopPlay(solver, ref nodeString, solverConversion, toCallAmount > 0);
+            catch (Exception)
+            {
+                Console.WriteLine($"Tree not Found: {treeFile + treeString + ".cfr"}");
+                SaveMissingSolves($"{treeFile + treeString + ".cfr"}");
+            }
             _round.UpdateBettingPatternPostflop(decision);
 
             if (decision.Kind == DecisionKind.Bet)
             {
+                _round.HandleBettingAndCalling(_round.PlayerToAct, decision.Amount - _round.PlayerToAct.ChipsInvestedInRound);
                 if (toCallAmount == 0)
                 {
                     builder.PlayerBets(_round.PlayerToAct, decision.Amount, _round);
@@ -88,15 +100,25 @@ public class PostflopRound
                 {
                     builder.PlayerRaises(_round.PlayerToAct, decision.Amount - toCallAmount, decision.Amount, _round);
                 }
+                
+                latestRaiseAmount = decision.Amount - toCallAmount;
                 toCallAmount = decision.Amount;
-                _round.HandleBettingAndCalling(_round.PlayerToAct, decision.Amount);
 
             }
             if (decision.Kind == DecisionKind.Call)
             {
-                //todo Call Allin in builder
-                _round.HandleBettingAndCalling(_round.PlayerToAct, toCallAmount - _round.PlayerToAct.ChipsInvestedInRound);
-                builder.PlayerCalls(_round.PlayerToAct, toCallAmount - _round.PlayerToAct.ChipsInvestedInRound, _round);
+                
+                if(_round.PlayerToAct.Chips <= toCallAmount - _round.PlayerToAct.ChipsInvestedInRound)
+                {
+                    //todo Call Allin in builder
+                    builder.PlayerCallsAllin(_round.PlayerToAct, toCallAmount, _round.PlayerToAct.Chips, _round);
+                    _round.HandleBettingAndCalling(_round.PlayerToAct, _round.PlayerToAct.Chips);
+                }
+                else
+                {
+                    builder.PlayerCalls(_round.PlayerToAct, toCallAmount - _round.PlayerToAct.ChipsInvestedInRound, _round);
+                    _round.HandleBettingAndCalling(_round.PlayerToAct, toCallAmount - _round.PlayerToAct.ChipsInvestedInRound);
+                }
             }
             if (decision.Kind == DecisionKind.Check)
             {
@@ -120,6 +142,7 @@ public class PostflopRound
             x.ChipsInvestedInRound = 0;
             x.NextStreet();
         });
+        return latestRaiseAmount;
     }
 
     private string GetTreeString(IEnumerable<Card> board)
@@ -215,6 +238,36 @@ public class PostflopRound
             {
                 toChange.Add(changeTo);
             }
+        }
+    }
+
+
+
+    private static void SaveMissingSolves(string tree)
+    {
+        var builder = new StringBuilder();
+        var contents = "";
+        string path = @"C:\PioSolver\missing.txt"; // path to file
+        if (File.Exists(path))
+        {
+            contents = File.ReadAllText(path);
+
+        }
+
+        using (FileStream fs = File.Create(path))
+        {
+            // writing data in string
+            if (contents.Length > 0)
+            {
+                builder.AppendLine();
+                builder.AppendLine(tree);
+            }
+            byte[] info = new UTF8Encoding(true).GetBytes(contents + builder.ToString());
+            fs.Write(info, 0, info.Length);
+
+            // writing data in bytes already
+            byte[] data = new byte[] { 0x0 };
+            fs.Write(data, 0, data.Length);
         }
     }
 

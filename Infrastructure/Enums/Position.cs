@@ -1,4 +1,4 @@
-﻿namespace Poker.Infrastructure.Models;
+﻿namespace Poker.Infrastructure.Enums;
 
 public enum Position
 {

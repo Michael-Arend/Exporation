@@ -4,7 +4,7 @@ namespace Poker.Infrastructure.Models;
 
 public class Round
 {
-    public Round(decimal smallBlind, decimal bigBlind, decimal limit)
+    public Round(decimal smallBlind, decimal bigBlind)
     {
         Deck = CreateDeck();
         Players = CreatePlayers(100);
@@ -12,7 +12,6 @@ public class Round
         SmallBlind = smallBlind;
         Pot = 0;
         DealCards();
-        Limit = limit;
         BettingPattern = "";
         Board = new List<Card>();
     }
@@ -25,7 +24,6 @@ public class Round
     public Player? PlayerToAct { get; private set; }
     public decimal SmallBlind { get; set; }
     public decimal BigBlind { get; set; }
-    public decimal Limit { get; set; }
 
     public decimal Pot { get; set; }
     public string BettingPattern { get; private set; }
@@ -102,6 +100,7 @@ public class Round
             Deck.Remove(card1);
             var num2 = rdm.Next(Deck.Count - 1);
             var card2 = Deck[num2];
+            Deck.Remove(card2);
             player.Hand = new Hand(card1, card2);
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Poker.Infrastructure.Models;
+﻿using Poker.Infrastructure.Enums;
+
+namespace Poker.Infrastructure.Models;
 
 public class Decision
 {
@@ -12,10 +14,3 @@ public class Decision
     public decimal Amount { get; set; }
 }
 
-public enum DecisionKind
-{
-    Check = 0,
-    Call = 1,
-    Bet = 2,
-    Fold = 3
-}

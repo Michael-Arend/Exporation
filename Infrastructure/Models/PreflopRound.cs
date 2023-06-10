@@ -1,4 +1,6 @@
-﻿namespace Poker.Infrastructure.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Poker.Infrastructure.Models;
 
 public class PreflopRound
 {
@@ -6,7 +8,7 @@ public class PreflopRound
     private Position _endActionPlayer = Position.BB;
     private Round _round;
     private decimal toCallAmountinBB = 0;
-    private decimal latestRaiseAmount = 0;
+    private decimal latestRaiseAmount = 0.5m;
 
     public Round PlayPreflop(Round round, HistoryBuilder.HistoryBuilder builder)
     {
@@ -15,16 +17,18 @@ public class PreflopRound
         var roundEnded = false;
         while (!roundEnded && _round.PlayersInHand.Count > 1)
         {
-            _round.NextPlayer();
+       
+     
             var decision =
                 _round.PlayerToAct.MakePreflopPlay(_bettingRound, _round.PlayersInHand, _round.BettingPattern, out var path);
             _round.TreePath = path ?? _round.TreePath;
-
+          
             _round.UpdateBettingPatternPreflop(decision);
+        
             if (decision.Kind == DecisionKind.Bet)
             {
+                _round.HandleBettingAndCalling(_round.PlayerToAct, decision.Amount- round.PlayerToAct.ChipsInvestedInRound);
                 builder.PlayerRaises(round.PlayerToAct, decision.Amount - toCallAmountinBB, decision.Amount, round);
-                _round.HandleBettingAndCalling(_round.PlayerToAct, decision.Amount);
                 _endActionPlayer = _round.FindLastToAct();
                 latestRaiseAmount = decision.Amount - toCallAmountinBB;
                 toCallAmountinBB = decision.Amount;
@@ -41,6 +45,7 @@ public class PreflopRound
             }
 
             roundEnded = _round.PlayerToAct.Position == _endActionPlayer;
+            _round.NextPlayer();
         }
 
         if (_round.PlayersInHand.Count == 1)
@@ -67,17 +72,19 @@ public class PreflopRound
 
     public void PostSmallBlind()
     {
-        _round.PlayerToAct.Chips -= _round.SmallBlind;
-        _round.Pot += _round.SmallBlind;
-        _round.PlayerToAct.ChipsInvestedInRound = _round.SmallBlind;
+        _round.PlayerToAct.Chips -= 0.5m;
+        _round.Pot += 0.5m;
+        _round.PlayerToAct.ChipsInvestedInRound = 0.5m;
         _round.NextPlayer();
     }
 
     public void PostBigBlind()
     {
-        _round.PlayerToAct.Chips -= _round.BigBlind;
-        _round.Pot += _round.BigBlind;
+        _round.PlayerToAct.Chips -= 1;
+        _round.Pot += 1;
         toCallAmountinBB = 1;
-        _round.PlayerToAct.ChipsInvestedInRound = _round.BigBlind;
+        latestRaiseAmount = 0.5m;
+        _round.PlayerToAct.ChipsInvestedInRound = 1;
+        _round.NextPlayer();
     }
 }

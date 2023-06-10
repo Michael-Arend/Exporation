@@ -10,7 +10,8 @@ var handAmount = Console.ReadLine();
 
 for (var i = 0; i < int.Parse(handAmount); i++)
 {
-    var round = new Round(0.25m, 0.5m, 0.5m);
+    Console.WriteLine(i + 1);
+    var round = new Round(0.25m, 0.5m);
     var preflopRound = new PreflopRound();
     var historyBuilder = new HistoryBuilder();
     historyBuilder.BuildHeader(round);

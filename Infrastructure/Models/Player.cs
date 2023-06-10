@@ -1,4 +1,5 @@
-﻿using Poker.Infrastructure.Data;
+﻿using Poker.Data;
+using Poker.Infrastructure.Enums;
 using Poker.Pio.Connection;
 using Poker.Pio.Util;
 
@@ -49,7 +50,8 @@ public class Player
             {
                 //<0 bedeutet all in
                 betFrequency =  handRange.Value;
-                betSize = actionPossibility.BetSize < 0 ? Chips : actionPossibility.BetSize;
+                betSize = actionPossibility.BetSize < 0 ? Chips+ChipsInvestedInRound : actionPossibility.BetSize;
+               
             }
             else
             {
@@ -60,13 +62,13 @@ public class Player
 
         var rdm = new Random().Next(100);
 
-        if (rdm <= betFrequency * 100)
+        if (rdm <= betFrequency * 100 && betFrequency >0)
         {
             ActualRange = ownRanges.FirstOrDefault(x => x.BetSize > 0);
             return new Decision(DecisionKind.Bet, betSize);
         }
 
-        if (rdm <= betFrequency * 100 + callFrequency * 100)
+        if (rdm <= betFrequency * 100 + callFrequency * 100 &&  (betFrequency > 0 || callFrequency >0))
         {
             ActualRange = ownRanges.FirstOrDefault(x => x.BetSize == 0);
             path = ActualRange?.Path;
@@ -83,7 +85,6 @@ public class Player
 
         var options = StrategyUtil.GetOptions(solver, nodeString);
         var handString = Hand.Convert(solverConversion).GetStringFromHandSorted();
-        var strat = StrategyUtil.GetStrategies(solver, nodeString);
         var strategy = StrategyUtil.GetStrategies(solver, nodeString).FirstOrDefault(x => x.Contains(handString));
         var selectedOption = "";
         if (strategy != null)
@@ -103,6 +104,7 @@ public class Player
         if (strategy != null && selectedOption[0] == 'b')
         {
             var value = decimal.Parse(selectedOption.Substring(1)) / 10;
+            value = Math.Min(value, Chips);
             return new Decision(DecisionKind.Bet, value);
         }
         if (strategy != null && selectedOption[0] == 'c')
