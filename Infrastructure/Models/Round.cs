@@ -49,6 +49,11 @@ public class Round
 
         }
     }
+   
+    public void NextStreet()
+    {
+        PlayerToAct = PlayersInHand.First();
+    }
 
     public List<Card> CreateDeck()
     {

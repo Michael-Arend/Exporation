@@ -45,12 +45,13 @@ namespace Poker.Infrastructure.HistoryBuilder
 
             var bb = round.Players.FirstOrDefault(x => x.Position == Position.BB);
             var sb = round.Players.FirstOrDefault(x => x.Position == Position.SB);
-            var hero = round.Players.FirstOrDefault(x => x.Name == "HeroGto");
-            var heroCards = hero.Hand.GetStringFromHand().Insert(2, " ");
             builder.AppendLine($"{sb.Name}: posts small blind ${(round.SmallBlind).ToString("0.00").Replace(",", ".")}");
             builder.AppendLine($"{bb.Name}: posts big blind ${round.BigBlind.ToString("0.00").Replace(",", ".")}");
             builder.AppendLine("*** HOLE CARDS ***");
-            builder.AppendLine($"Dealt to {hero.Name} [{heroCards}]");
+            foreach (var player in round.Players)
+            {
+                builder.AppendLine($"Dealt to {player.Name} [{player.Hand.GetStringFromHand().Insert(2, " ")}]");
+            }
         }
 
         public void SaveHistoryToFile(string location)
@@ -108,7 +109,7 @@ namespace Poker.Infrastructure.HistoryBuilder
             builder.AppendLine($"{player.Name}: calls ${chipsString} and is all-in");
             if(chips < toCallAmount)
             {
-                var returnString = (toCallAmount - chips * round.BigBlind).ToString("0.00").Replace(",", ".");
+                var returnString = ((toCallAmount - chips) * round.BigBlind).ToString("0.00").Replace(",", ".");
                 builder.AppendLine($"Uncalled bet (${returnString}) returned to {round.PlayersInHand.First(x=>x.Name != player.Name).Name}");
             }
         }

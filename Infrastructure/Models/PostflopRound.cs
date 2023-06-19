@@ -25,15 +25,17 @@ public class PostflopRound
 
     public Round PlayPostflop(HistoryBuilder.HistoryBuilder builder, SolverConnection solver)
     {
+        _round.NextStreet();
         var returnAmount = 0m;
         returnAmount = PlayStreetPostFlop(solver, "flop", builder);
         if (_round.PlayersInHand.Count > 1)
         {
-
-           returnAmount =  PlayStreetPostFlop(solver, "turn", builder);
+            _round.NextStreet();
+            returnAmount =  PlayStreetPostFlop(solver, "turn", builder);
         }
         if (_round.PlayersInHand.Count > 1)
         {
+            _round.NextStreet();
             returnAmount =  PlayStreetPostFlop(solver, "river", builder);
         }
             builder.HandleWin(_round.PlayersInHand.First(), _round.PlayersInHand.Count > 1 ? 0 : returnAmount, _round, _round.PlayersInHand.Count >1);
@@ -112,8 +114,7 @@ public class PostflopRound
                 
                 if(_round.PlayerToAct.Chips <= toCallAmount - _round.PlayerToAct.ChipsInvestedInRound)
                 {
-                    //todo Call Allin in builder
-                    builder.PlayerCallsAllin(_round.PlayerToAct, toCallAmount, _round.PlayerToAct.Chips, _round);
+                    builder.PlayerCallsAllin(_round.PlayerToAct, toCallAmount - _round.PlayerToAct.ChipsInvestedInRound, _round.PlayerToAct.Chips, _round);
                     _round.HandleBettingAndCalling(_round.PlayerToAct, _round.PlayerToAct.Chips);
                 }
                 else

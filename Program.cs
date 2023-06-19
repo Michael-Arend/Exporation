@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Timers;
 
 var solver = new SolverConnection(@"C:\PioSolver\PioSOLVER2-pro.exe");
-var baseCFRLocation = @"V:";
+var baseCFRLocation = @"W:";
 var handAmount = Console.ReadLine();
 var historyBuilder = new HistoryBuilder();
 Stopwatch sw = new Stopwatch();

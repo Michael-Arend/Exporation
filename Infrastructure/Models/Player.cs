@@ -68,7 +68,7 @@ public class Player
             return new Decision(DecisionKind.Bet, betSize);
         }
 
-        if (rdm <= betFrequency * 100 + callFrequency * 100 &&  (betFrequency > 0 || callFrequency >0))
+        if (rdm <= betFrequency * 100 + callFrequency * 100 &&  callFrequency >0)
         {
             ActualRange = ownRanges.FirstOrDefault(x => x.BetSize == 0);
             path = ActualRange?.Path;
@@ -110,6 +110,10 @@ public class Player
         if (strategy != null && selectedOption[0] == 'c')
         {
             return hasOpenCall ? new Decision(DecisionKind.Call, 0) : new Decision(DecisionKind.Check, 0);
+        }
+        if(strategy == null)
+        {
+            var i = 1;
         }
         PlayerInHand = false;
         return new Decision(DecisionKind.Fold, 0);
