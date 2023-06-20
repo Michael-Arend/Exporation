@@ -42,7 +42,7 @@
 
                 var value = Decimal.Parse(valueString);
                 value /= 100;
-                var cut = value == 1 ? 0 : value > 0.1m ? 5 : 6;
+                var cut = value == 1 ? 0 : value > 10 ? 7 : 6;
                 var cards = group.Substring(cut, group.Length - cut * 2).Split(", ");
                 foreach (var card in cards)
                 {
