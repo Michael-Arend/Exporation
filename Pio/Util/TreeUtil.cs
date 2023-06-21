@@ -4,10 +4,20 @@ namespace Client.Util
 {
     public static class TreeUtil
     {
-        public static void LoadTree(SolverConnection solver, string fileName)
+        public static bool LoadTree(SolverConnection solver, string fileName)
         {
-            var loadTree = solver.GetResponseFromSolver("load_tree " + fileName);
-            Console.WriteLine(loadTree[0]);
+            try
+            {
+                var loadTree = solver.GetResponseFromSolver("load_tree " + fileName);
+                Console.WriteLine(loadTree[0]);
+                return true;
+            }
+            catch (Exception )
+            {
+                return false;
+            }
+            
+          
         }
 
         public static void DumpTree(SolverConnection solver, string fileName, TreeSize mode)

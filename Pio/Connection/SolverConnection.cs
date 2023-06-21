@@ -27,6 +27,8 @@ namespace Poker.Pio.Connection
             return r.Response;
         }
 
+     
+
         public void Disconnect()
         {
             SetRequest(new RequestResponse("exit"));
@@ -395,6 +397,8 @@ namespace Poker.Pio.Connection
                     Monitor.PulseAll(this.Locker);
                 }
             }
+
+        
         }
         #endregion
     }

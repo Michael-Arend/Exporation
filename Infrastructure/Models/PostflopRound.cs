@@ -4,6 +4,7 @@ using Poker.Infrastructure.Helper.Extensions;
 using Poker.Pio.Connection;
 using System.IO;
 using System.Text;
+using Poker.Pio.Util;
 
 namespace Poker.Infrastructure.Models;
 
@@ -23,11 +24,11 @@ public class PostflopRound
     }
 
 
-    public Round PlayPostflop(HistoryBuilder.HistoryBuilder builder, SolverConnection solver)
+    public  Round PlayPostflop(HistoryBuilder.HistoryBuilder builder, SolverConnection solver)
     {
         _round.NextStreet();
         var returnAmount = 0m;
-        returnAmount = PlayStreetPostFlop(solver, "flop", builder);
+        returnAmount =  PlayStreetPostFlop(solver, "flop", builder);
         if (_round.PlayersInHand.Count > 1)
         {
             _round.NextStreet();
@@ -42,7 +43,7 @@ public class PostflopRound
         return _round;
     }
 
-    public decimal PlayStreetPostFlop(SolverConnection solver, string street, HistoryBuilder.HistoryBuilder builder)
+    public  decimal PlayStreetPostFlop(SolverConnection solver, string street, HistoryBuilder.HistoryBuilder builder)
     {
         _round.NextBoardCards();
         builder.HandleNewStreet(street, _round.Board);
@@ -58,12 +59,17 @@ public class PostflopRound
             // update Convert pattern to pio
             try
             {
-                TreeUtil.LoadTree(solver, treeFile + treeString + ".cfr");
-
+                var successful = TreeUtil.LoadTree(solver, treeFile + treeString + ".cfr");
+                if (!successful)
+                {
+                    Console.WriteLine($"Tree not Found: {treeFile + GetTreeString(_round.Board) + ".cfr"}");
+                    
+                     SolveTree(_round, solver, treeFile + treeString + ".cfr");
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine($"Tree not Found: {treeFile + GetTreeString(_round.Board) + ".cfr"}");
+                throw e;
             }
         }
         else
@@ -272,6 +278,13 @@ public class PostflopRound
             byte[] data = new byte[] { 0x0 };
             fs.Write(data, 0, data.Length);
         }
+    }
+
+    private static void SolveTree(Round _round, SolverConnection solver, string savePath)
+    {
+        var board = $"{_round.Board[0].GetStringFromCard()}{_round.Board[1].GetStringFromCard()}{_round.Board[2].GetStringFromCard()}";
+        PostFlopSolves.BuildTree(solver, _round.PlayersInHand, board, _round.Pot);
+        PostFlopSolves.Solve(solver, savePath);
     }
 
 
