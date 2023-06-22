@@ -2,10 +2,10 @@
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Poker.Infrastructure.Models;
 using Poker.Pio.Connection;
 using PokerLibrary.Business;
 using PokerLibrary.Infrastructure.Models;
+using PokerLibrary.Pio.Util;
 
 namespace Poker.Pio.Util
 {
@@ -86,8 +86,8 @@ namespace Poker.Pio.Util
                 var ip = player.Last();
                 var effStacks = Math.Round(Math.Min(ip.Chips, oop.Chips) * 10m);
                 script = new StringBuilder();
-                SetRange(solver, "OOP", PioStringFromRange(oop.ActualRange.Frequencies));
-                SetRange(solver, "IP", PioStringFromRange(ip.ActualRange.Frequencies));
+                SetRange(solver, "OOP", PioStringFromRange(oop.ActualRange.Frequencies.ToList()));
+                SetRange(solver, "IP", PioStringFromRange(ip.ActualRange.Frequencies.ToList()));
                 SetStack(solver, effStacks);
                 SetBoard(solver, board);
                 SetPot(solver, Math.Round(pot) * 10m);

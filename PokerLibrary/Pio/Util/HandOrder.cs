@@ -1,4 +1,4 @@
-﻿namespace Poker.Pio.Util;
+﻿namespace PokerLibrary.Pio.Util;
 
 internal static class HandOrder
 {

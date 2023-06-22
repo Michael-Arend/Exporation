@@ -1,6 +1,4 @@
-﻿using Poker.Infrastructure.Models;
-
-namespace PokerLibrary.Infrastructure.Models;
+﻿namespace PokerLibrary.Infrastructure.Models;
 
 public class Frequency
 {

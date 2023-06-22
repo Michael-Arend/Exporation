@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Poker.Infrastructure.Models;
 using Poker.Pio.Connection;
 using PokerLibrary.Infrastructure.Models;
 

@@ -1,32 +1,61 @@
-﻿using PokerLibrary.Infrastructure.Models;
+﻿using PokerLibrary.Pio.Util;
 
-namespace Poker.Infrastructure.Models
+namespace PokerLibrary.Infrastructure.Models
 {
     public class HandRange
     {
       
-        public HandRange(string bettingPattern, decimal size, string? path, string ranges)
+        public HandRange(string bettingPattern, decimal size, string? path, string range)
         {
-            RangesText = ranges;
-            Frequencies = ranges.Substring(0, 1) == "[" ? CreateFrequenciesForCarrots(ranges) : CreateFrequenciesForGtoWizard(ranges);
+            RangeText = range;
+            Frequencies = CreateFrequencies(range);
             BetSize = size;
             BettingPattern = bettingPattern;
             Path = path;
         }
 
+
         public decimal BetSize { get; set; }
         public string BettingPattern { get; set; }
 
-        public string RangesText { get; set; }
+        public string RangeText { get; set; }
 
         public string? Path { get; set; }
 
-        public List<Frequency> Frequencies { get; set; }
+        public IEnumerable<Frequency> Frequencies { get; set; }
 
 
 
 
-        private List<Frequency> CreateFrequenciesForCarrots(string ranges)
+        private static IEnumerable<Frequency> CreateFrequencies(string range)
+        {
+            if (range[..1] == "[")
+            {
+                return CreateFrequenciesForCarrots(range);
+            }
+
+            return range.Split(" ").Length == 1326 ? CreateFrequenciesForPioStandard(range) : CreateFrequenciesForGtoWizard(range);
+        }
+
+        private static IEnumerable<Frequency> CreateFrequenciesForPioStandard(string range)
+        {
+            var result = new List<Frequency>();
+            var r = range.Split(" ");
+
+            var handOrder = HandOrder.GetHandOrderArray();
+            var i=0;
+            foreach (var hand in handOrder)
+            {
+                result.Add(new Frequency(new Hand(hand),decimal.Parse(r[i])));
+                i++;
+            }
+
+            return result;
+        }
+
+
+
+        private static IEnumerable<Frequency> CreateFrequenciesForCarrots(string ranges)
         {
             var output = new List<Frequency>();
 
@@ -53,7 +82,7 @@ namespace Poker.Infrastructure.Models
             return output;
         }
 
-        List<Frequency> CreateFrequenciesForGtoWizard(string ranges)
+        static IEnumerable<Frequency> CreateFrequenciesForGtoWizard(string ranges)
         {
             var output = new List<Frequency>();
 
