@@ -1,0 +1,167 @@
+﻿<UserControl x:Class="PokerFrontend.Views.Ranges.Add.RangeActionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+             xmlns:add="clr-namespace:PokerFrontend.ViewModel.Ranges.Add"
+             xmlns:enums="clr-namespace:PokerFrontend.Infrastructure.Enums"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance add:RangeActionViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../../Views/Styles/ControlReferenceSectionStyle.xaml" />
+                <ResourceDictionary Source="../../../Views/Styles/ItemGroupLabelStyle.xaml" />
+                <ResourceDictionary Source="../../../Views/Styles/MainHeader.xaml" />
+                <ResourceDictionary Source="../../../Views/Styles/TextBox.xaml" />
+                <ResourceDictionary Source="../../../Views/Styles/Colors.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <StackPanel>
+       
+            <TextBlock Style="{StaticResource MainHeader}">Define Preflop Ranges</TextBlock>
+      
+        <StackPanel MaxWidth="600" Background="{StaticResource {x:Static adonisUi:Brushes.AccentBrush}}">
+            <StackPanel Orientation="Horizontal" Margin="20,20,0,0">
+                <TextBlock Text="{Binding ActualNumber}"/>
+                <TextBlock Text="of" Margin="5,0"></TextBlock>
+                <TextBlock Text="{Binding OverAllNumber}"/>
+            </StackPanel>
+            <Grid Margin="20,0,20,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <GroupBox Grid.ColumnSpan="2" Style="{StaticResource ControlReferenceSectionStyle}">
+                    <GroupBox.Header>
+                        <Label Content="Name"
+                               Style="{StaticResource ItemGroupLabelStyle}" />
+                    </GroupBox.Header>
+
+                    <TextBox Text="{Binding Name, ValidatesOnDataErrors=True, 
+                                    NotifyOnValidationError=True,
+                                    UpdateSourceTrigger=PropertyChanged
+                                    }"
+                             IsReadOnly="{Binding IsDefault}"
+                             extensions:WatermarkExtension.Watermark="i.e. GTO Wizard simple ranges"
+                             Margin="{adonisUi:Space 0, 0, 1, 0}" />
+
+                </GroupBox>
+
+                <GroupBox Grid.Row="1" Grid.Column="1" Style="{StaticResource ControlReferenceSectionStyle}">
+                    <GroupBox.Header>
+                        <Label Content="Post Flop Solves"
+                               Style="{StaticResource ItemGroupLabelStyle}" />
+                    </GroupBox.Header>
+<Grid Margin="0,0,8,0">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+    <TextBox
+                        Text="{Binding Folder,
+                                    ValidatesOnDataErrors=True,
+                                    NotifyOnValidationError=True,
+                                    UpdateSourceTrigger=PropertyChanged
+                                    }"
+                        IsEnabled="{Binding FlopSolvesEnabled}"
+                        extensions:WatermarkExtension.Watermark="Enter text"
+                        Margin="{adonisUi:Space 0, 0, 1, 0}" />
+                    <Button Grid.Column="1" IsEnabled="{Binding FlopSolvesEnabled}"  Click="ButtonBase_OnClick">Select</Button>
+</Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="1" Grid.Column="0" Style="{StaticResource ControlReferenceSectionStyle}">
+                    <GroupBox.Header>
+                        <Label Content="Action"
+                               Style="{StaticResource ItemGroupLabelStyle}" />
+                    </GroupBox.Header>
+
+                    <ComboBox Text="{Binding Decision}"
+                              IsEditable="false"
+                              extensions:WatermarkExtension.Watermark="Select an option"
+                              Margin="{adonisUi:Space 0, 0, 1, 0}">
+                        <ComboBox.Items>
+                            <ComboBoxItem Content="{x:Static enums:DecisionKind.Call}" />
+                            <ComboBoxItem Content="{x:Static enums:DecisionKind.Bet}" />
+                        </ComboBox.Items>
+                    </ComboBox>
+
+                </GroupBox>
+                <GroupBox Grid.Row="2" Grid.Column="0" Style="{StaticResource ControlReferenceSectionStyle}">
+                    <GroupBox.Header>
+                        <Label Content="Bet Sizing in BB"
+                               Style="{StaticResource ItemGroupLabelStyle}" />
+                    </GroupBox.Header>
+
+                    <TextBox Text="{Binding BetSizing, ValidatesOnDataErrors=True,
+                                    NotifyOnValidationError=True,
+                                    UpdateSourceTrigger=PropertyChanged
+                                    }"
+                             extensions:WatermarkExtension.Watermark="Enter text"
+                             PreviewTextInput="NumberValidationTextBox"
+                             Margin="{adonisUi:Space 0, 0, 1, 0}" />
+
+                </GroupBox>
+
+                <GroupBox Grid.Row="2" Grid.Column="1" Style="{StaticResource ControlReferenceSectionStyle}">
+                    <GroupBox.Header>
+                        <Label Content="Betting Pattern"
+                               Style="{StaticResource ItemGroupLabelStyle}" />
+                    </GroupBox.Header>
+
+                    <TextBox Text="{Binding Pattern, ValidatesOnDataErrors=True,
+                                    NotifyOnValidationError=True,
+                                    UpdateSourceTrigger=PropertyChanged
+                                    }"
+                             IsReadOnly="{Binding IsDefault}"
+                             Margin="{adonisUi:Space 0, 0, 1, 0}" />
+
+                </GroupBox>
+
+                <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ControlReferenceSectionStyle}">
+                    <GroupBox.Header>
+                        <Label Content="Range"
+                               Style="{StaticResource ItemGroupLabelStyle}" />
+                    </GroupBox.Header>
+
+                    <TextBox Text="{Binding Range, ValidatesOnDataErrors=True,
+                                    NotifyOnValidationError=True,
+                                    UpdateSourceTrigger=PropertyChanged
+                                    }"
+                             MaxLines="500"
+                             MinLines="5"
+                             Height="300"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Visible"
+                             extensions:WatermarkExtension.Watermark="Enter text"
+                             Margin="{adonisUi:Space 0, 0, 1, 0}" />
+
+                </GroupBox>
+
+
+
+                <Button Grid.Row="4" Grid.Column="0"  Margin="0,20,7,0"  Grid.ColumnSpan="2" IsEnabled="{Binding ButtonEnabled}" Padding="{adonisUi:Space 1}" Height="50"  FontSize="20" FontWeight="Bold"
+                        Command="{Binding NextCommand}">
+                    <TextBlock Text="Next"
+                               VerticalAlignment="Center"
+                               Margin="{adonisUi:Space 0, 0, 1, 0}" />
+                </Button>
+            </Grid>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="PokerFrontend.Views.SideBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PokerFrontend.Views"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+             xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+             xmlns:pokerFrontend="clr-namespace:PokerFrontend"
+             xmlns:extensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
+             xmlns:enums="clr-namespace:PokerFrontend.Infrastructure.Enums"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="NavigationGroupHeaderStyle"
+               TargetType="TextBlock"
+               BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        
+        <GroupBox MinWidth="{adonisUi:Space 25}"
+                  Padding="{adonisUi:Space 0, 1, 0, 0}">
+
+            <Grid Margin="5" VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{Binding TitleBarActualHeight, RelativeSource={RelativeSource AncestorType={x:Type adonisControls:AdonisWindow}}}"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="{adonisUi:Space 2}"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Ranges Setup"
+                                           Style="{StaticResource NavigationGroupHeaderStyle}"/>
+
+                    <StackPanel Grid.Row="1"
+                                      >
+
+                        <Button Margin="{adonisUi:Space 1}" Padding="{adonisUi:Space 1}" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.CreateRange}">
+                            <TextBlock Text="Add New Ranges"
+                                       VerticalAlignment="Center"
+                                       Margin="{adonisUi:Space 0, 0, 1, 0}"/>
+                        </Button>
+                        <Button Margin="{adonisUi:Space 1}" Padding="{adonisUi:Space 1}" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.EditRanges}">
+                            <TextBlock Text="Edit Ranges"
+                                       VerticalAlignment="Center"
+                                       Margin="{adonisUi:Space 0, 0, 1, 0}"/>
+                        </Button>
+                        <Button Margin="{adonisUi:Space 1}" Padding="{adonisUi:Space 1}" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.DeleteRanges}">
+                            <TextBlock Text="Add New Ranges"
+                                       VerticalAlignment="Center"
+                                       Margin="{adonisUi:Space 0, 0, 1, 0}"/>
+                        </Button>
+
+                    </StackPanel>
+                </Grid>
+
+
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="{adonisUi:Space 2}"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Create Hand Histories"
+                               Style="{StaticResource NavigationGroupHeaderStyle}"/>
+
+                    <StackPanel Grid.Row="1"
+                    >
+
+                        <Button Margin="{adonisUi:Space 1}" Padding="{adonisUi:Space 1}" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.CreateHandHistories}" >
+                            <TextBlock Text="Create"
+                                       VerticalAlignment="Center"
+                                       Margin="{adonisUi:Space 0, 0, 1, 0}"/>
+                        </Button>
+
+                    </StackPanel>
+                </Grid>
+
+
+         
+
+
+
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>
