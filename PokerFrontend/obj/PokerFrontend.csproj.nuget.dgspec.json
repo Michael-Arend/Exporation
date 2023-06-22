@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projects\\PokerFrontend\\PokerFrontend.csproj": {}
+    "C:\\Projects\\Poker\\PokerFrontend\\PokerFrontend.csproj": {}
   },
   "projects": {
-    "C:\\Projects\\PokerFrontend\\PokerFrontend.csproj": {
+    "C:\\Projects\\Poker\\PokerFrontend\\PokerFrontend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\PokerFrontend\\PokerFrontend.csproj",
+        "projectUniqueName": "C:\\Projects\\Poker\\PokerFrontend\\PokerFrontend.csproj",
         "projectName": "PokerFrontend",
-        "projectPath": "C:\\Projects\\PokerFrontend\\PokerFrontend.csproj",
+        "projectPath": "C:\\Projects\\Poker\\PokerFrontend\\PokerFrontend.csproj",
         "packagesPath": "C:\\Users\\marend.ARTISOAG\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\PokerFrontend\\obj\\",
+        "outputPath": "C:\\Projects\\Poker\\PokerFrontend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\marend.ARTISOAG\\AppData\\Roaming\\NuGet\\NuGet.Config",

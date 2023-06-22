@@ -56,7 +56,7 @@ namespace PokerFrontend.Views.Ranges.Add {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PokerFrontend;V1.0.0.0;component/views/ranges/add/rangeactionview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PokerFrontend;component/views/ranges/add/rangeactionview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\Ranges\Add\RangeActionView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -1,0 +1,5 @@
+C:\Projects\Poker\obj\Debug\net6.0\PokerConsole.csproj.AssemblyReference.cache
+C:\Projects\Poker\obj\Debug\net6.0\PokerConsole.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Poker\obj\Debug\net6.0\PokerConsole.AssemblyInfoInputs.cache
+C:\Projects\Poker\obj\Debug\net6.0\PokerConsole.AssemblyInfo.cs
+C:\Projects\Poker\obj\Debug\net6.0\PokerConsole.csproj.CoreCompileInputs.cache

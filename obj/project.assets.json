@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\Poker\\PokerLibrary\\PokerLibrary.csproj",
-      "projectName": "PokerLibrary",
-      "projectPath": "C:\\Projects\\Poker\\PokerLibrary\\PokerLibrary.csproj",
+      "projectUniqueName": "C:\\Projects\\Poker\\PokerConsole.csproj",
+      "projectName": "PokerConsole",
+      "projectPath": "C:\\Projects\\Poker\\PokerConsole.csproj",
       "packagesPath": "C:\\Users\\marend.ARTISOAG\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\Poker\\PokerLibrary\\obj\\",
+      "outputPath": "C:\\Projects\\Poker\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\marend.ARTISOAG\\AppData\\Roaming\\NuGet\\NuGet.Config",

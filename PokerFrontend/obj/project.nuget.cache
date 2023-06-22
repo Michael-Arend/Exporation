@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "GXC+jCkm5jDzvdMBonLRg9UYimLNj29Qi5aGpNP9zYxkKA6ztJDlbwdQb2K+lGiP1Wr5RbxKTSDLH8EF4DQEFw==",
+  "dgSpecHash": "beUfpicK1Y55lxolMl5inyKLWNgMrpUKnrO5Rl0lvxfl4vqGsE8wdARGM+KDb2r7NcrWb9hdOeJDgeD4b+BysA==",
   "success": true,
-  "projectFilePath": "C:\\Projects\\PokerFrontend\\PokerFrontend.csproj",
+  "projectFilePath": "C:\\Projects\\Poker\\PokerFrontend\\PokerFrontend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\marend.ARTISOAG\\.nuget\\packages\\adonisui\\1.17.1\\adonisui.1.17.1.nupkg.sha512",
     "C:\\Users\\marend.ARTISOAG\\.nuget\\packages\\adonisui.classictheme\\1.17.1\\adonisui.classictheme.1.17.1.nupkg.sha512",

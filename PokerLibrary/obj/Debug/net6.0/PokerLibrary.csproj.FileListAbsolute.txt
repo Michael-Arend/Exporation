@@ -10,3 +10,15 @@ C:\Projects\PokerLibrary\obj\Debug\net6.0\PokerLibrary.dll
 C:\Projects\PokerLibrary\obj\Debug\net6.0\refint\PokerLibrary.dll
 C:\Projects\PokerLibrary\obj\Debug\net6.0\PokerLibrary.pdb
 C:\Projects\PokerLibrary\obj\Debug\net6.0\ref\PokerLibrary.dll
+C:\Projects\Poker\PokerLibrary\bin\Debug\net6.0\PokerLibrary.deps.json
+C:\Projects\Poker\PokerLibrary\bin\Debug\net6.0\PokerLibrary.dll
+C:\Projects\Poker\PokerLibrary\bin\Debug\net6.0\PokerLibrary.pdb
+C:\Projects\Poker\PokerLibrary\obj\Debug\net6.0\PokerLibrary.csproj.AssemblyReference.cache
+C:\Projects\Poker\PokerLibrary\obj\Debug\net6.0\PokerLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Poker\PokerLibrary\obj\Debug\net6.0\PokerLibrary.AssemblyInfoInputs.cache
+C:\Projects\Poker\PokerLibrary\obj\Debug\net6.0\PokerLibrary.AssemblyInfo.cs
+C:\Projects\Poker\PokerLibrary\obj\Debug\net6.0\PokerLibrary.csproj.CoreCompileInputs.cache
+C:\Projects\Poker\PokerLibrary\obj\Debug\net6.0\PokerLibrary.dll
+C:\Projects\Poker\PokerLibrary\obj\Debug\net6.0\refint\PokerLibrary.dll
+C:\Projects\Poker\PokerLibrary\obj\Debug\net6.0\PokerLibrary.pdb
+C:\Projects\Poker\PokerLibrary\obj\Debug\net6.0\ref\PokerLibrary.dll
