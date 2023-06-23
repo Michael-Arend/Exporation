@@ -23,9 +23,16 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel>
-        <TextBlock Style="{StaticResource MainHeader}">Range Basic Information</TextBlock>
-        <StackPanel MaxWidth="600" Background="{StaticResource {x:Static adonisUi:Brushes.AccentBrush}}">
+    <Grid VerticalAlignment="Stretch" Background="{StaticResource {x:Static adonisUi:Brushes.AccentBrush}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions> 
+
+        <TextBlock Foreground="White"  Style="{StaticResource MainHeader}">Range Basic Information</TextBlock>
+
+ 
+        <StackPanel Grid.Row="1" Margin="0 50 0 0" MaxWidth="600" Background="{StaticResource {x:Static adonisUi:Brushes.AccentBrush}}">
             <StackPanel Margin="20">
                 <GroupBox Style="{StaticResource ControlReferenceSectionStyle}">
                     <GroupBox.Header>
@@ -119,5 +126,5 @@
                 </Button>
             </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </Grid>
 </UserControl>

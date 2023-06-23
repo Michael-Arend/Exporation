@@ -5,8 +5,11 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using AdonisUI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using PokerFrontend.Business;
+using PokerFrontend.ViewModel.HandHistories;
+using PokerFrontend.ViewModel.Ranges.Add;
 
 namespace PokerFrontend
 {
@@ -18,9 +21,12 @@ namespace PokerFrontend
         public App()
         {
             Services = ConfigureServices();
-
-            this.InitializeComponent();
+            var mainWindow = Services.GetService<MainWindow>();
+            mainWindow.DataContext = Services.GetService<MainViewModel>();
+            mainWindow.Show();
         }
+
+
 
         /// <summary>
         /// Gets the current <see cref="App"/> instance in use
@@ -40,7 +46,14 @@ namespace PokerFrontend
         {
             var services = new ServiceCollection();
 
-            services.AddTransient<RangesBusinessHandler>();
+            services.AddTransient<RangesBusinessHandler>(); 
+            services.AddTransient<ReadSaveSettingsBusinessHandler>();
+            services.AddTransient<MainViewModel>();
+            services.AddTransient<CreateRangesViewModel>();
+            services.AddTransient<CreateViewModel>();
+            services.AddSingleton<MainWindow>();
+
+
 
             return services.BuildServiceProvider();
         }

@@ -891,6 +891,16 @@
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App.WindowsForms"
         ]
+      },
+      "PokerLibrary/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/PokerLibrary.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/PokerLibrary.dll": {}
+        }
       }
     }
   },
@@ -3244,6 +3254,11 @@
         "windowsapicodepack.7.0.4.nupkg.sha512",
         "windowsapicodepack.nuspec"
       ]
+    },
+    "PokerLibrary/1.0.0": {
+      "type": "project",
+      "path": "../PokerLibrary/PokerLibrary.csproj",
+      "msbuildProject": "../PokerLibrary/PokerLibrary.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3251,6 +3266,7 @@
       "AdonisUI.ClassicTheme >= 1.17.1",
       "CommunityToolkit.Mvvm >= 8.2.0",
       "Microsoft.Extensions.DependencyInjection >= 7.0.0",
+      "PokerLibrary >= 1.0.0",
       "WindowsAPICodePack >= 7.0.4"
     ]
   },
@@ -3281,7 +3297,11 @@
       "frameworks": {
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Projects\\Poker\\PokerLibrary\\PokerLibrary.csproj": {
+              "projectPath": "C:\\Projects\\Poker\\PokerLibrary\\PokerLibrary.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

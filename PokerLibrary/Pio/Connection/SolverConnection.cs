@@ -8,7 +8,7 @@ namespace Poker.Pio.Connection
     {
         public event SolverUtils.SolverLogMessage LogEvent;
         
-        public int SolverConnectionTimeoutInMiliseconds = 2000;
+        public int SolverConnectionTimeoutInMiliseconds = 5000;
 
         public SolverConnection(string solverExecutablePath)
         {

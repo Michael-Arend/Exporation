@@ -8,19 +8,19 @@
         xmlns:views="clr-namespace:PokerFrontend.Views"
         xmlns:add="clr-namespace:PokerFrontend.ViewModel.Ranges.Add"
         xmlns:add1="clr-namespace:PokerFrontend.Views.Ranges.Add"
+        xmlns:handHistories="clr-namespace:PokerFrontend.Views.HandHistories"
+        xmlns:handHistories1="clr-namespace:PokerFrontend.ViewModel.HandHistories"
         mc:Ignorable="d"
         Title="Hand History Creater"    
         d:DataContext="{d:DesignInstance local:MainViewModel}"
-
         MinHeight="775"
         Width="800">
     <Window.Style>
         <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
     </Window.Style>
 
-   
-    <Window.Resources>
 
+    <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:SideBarViewModel}">
             <views:SideBarView/>
         </DataTemplate>
@@ -33,15 +33,10 @@
         <DataTemplate DataType="{x:Type add:RangeActionViewModel}">
             <add1:RangeActionView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type handHistories1:CreateViewModel}">
+           <handHistories:CreateView/>
+        </DataTemplate>
 
-        <ResourceDictionary x:Key="styles">
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Views/Styles/ControlReferenceSectionStyle.xaml"/>
-                <ResourceDictionary Source="../Views/Styles/ItemGroupLabelStyle.xaml"/>
-                <ResourceDictionary Source="../Views/Styles/TextBox.xaml"/>
-                <ResourceDictionary Source="../Views/Styles/Colors.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
     </Window.Resources>
 
       

@@ -92,3 +92,7 @@ C:\Projects\Poker\PokerFrontend\obj\Debug\net6.0-windows\refint\PokerFrontend.dl
 C:\Projects\Poker\PokerFrontend\obj\Debug\net6.0-windows\PokerFrontend.pdb
 C:\Projects\Poker\PokerFrontend\obj\Debug\net6.0-windows\PokerFrontend.genruntimeconfig.cache
 C:\Projects\Poker\PokerFrontend\obj\Debug\net6.0-windows\ref\PokerFrontend.dll
+C:\Projects\Poker\PokerFrontend\obj\Debug\net6.0-windows\Views\HandHistories\CreateView.g.cs
+C:\Projects\Poker\PokerFrontend\obj\Debug\net6.0-windows\Views\HandHistories\CreateView.baml
+C:\Projects\Poker\PokerFrontend\bin\Debug\net6.0-windows\PokerLibrary.dll
+C:\Projects\Poker\PokerFrontend\bin\Debug\net6.0-windows\PokerLibrary.pdb

@@ -11,6 +11,7 @@
           "AdonisUI.ClassicTheme": "1.17.1",
           "CommunityToolkit.Mvvm": "8.2.0",
           "Microsoft.Extensions.DependencyInjection": "7.0.0",
+          "PokerLibrary": "1.0.0",
           "WindowsAPICodePack": "7.0.4"
         },
         "runtime": {
@@ -496,6 +497,11 @@
             "fileVersion": "7.0.4.0"
           }
         }
+      },
+      "PokerLibrary/1.0.0": {
+        "runtime": {
+          "PokerLibrary.dll": {}
+        }
       }
     }
   },
@@ -903,6 +909,11 @@
       "sha512": "sha512-uwggctGEetWoLNMxn6xbwsIiX3zHbsL1iYm5rrDWgNNVnkip03WsePEcVPx8yXs310RzJs3TLTQOrhw8i5ulRA==",
       "path": "windowsapicodepack/7.0.4",
       "hashPath": "windowsapicodepack.7.0.4.nupkg.sha512"
+    },
+    "PokerLibrary/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Projects\Poker\PokerFrontend\App.xaml
-10285179418
+11-211847499
 
-18703156771
-212111698462
-MainWindow.xaml;Views\Ranges\Add\CreateRangesView.xaml;Views\Ranges\Add\RangeActionView.xaml;Views\Ranges\Add\RangeBasicInformationView.xaml;Views\SideBarView.xaml;Views\Styles\Colors.xaml;Views\Styles\ControlReferenceSectionStyle.xaml;Views\Styles\ItemGroupLabelStyle.xaml;Views\Styles\MainHeader.xaml;Views\Styles\TextBox.xaml;
+24-484092736
+213-470178176
+MainWindow.xaml;Views\HandHistories\CreateView.xaml;Views\Ranges\Add\CreateRangesView.xaml;Views\Ranges\Add\RangeActionView.xaml;Views\Ranges\Add\RangeBasicInformationView.xaml;Views\SideBarView.xaml;Views\Styles\Colors.xaml;Views\Styles\ControlReferenceSectionStyle.xaml;Views\Styles\ItemGroupLabelStyle.xaml;Views\Styles\MainHeader.xaml;Views\Styles\TextBox.xaml;
 
 False
 

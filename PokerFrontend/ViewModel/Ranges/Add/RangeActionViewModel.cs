@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Security.AccessControl;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -25,7 +26,19 @@ public class RangeActionViewModel : ObservableObject
     public RangeActionViewModel()
     {
         FolderSelectedCommand = new RelayCommand<string>(FolderSelected);
-        NextCommand = new RelayCommand(()=> NextEvent?.Invoke(this, _action));
+        NextCommand = new RelayCommand(()=> ActionFinished());
+        CompleteCommand = new RelayCommand(() => CompleteEvent?.Invoke(this,null));
+    }
+
+    private void ActionFinished()
+    {
+        _action.Decision = Decision;
+        _action.Name = Name;
+        _action.Folder = Folder;
+        _action.BetSizing = decimal.Parse(BetSizing);
+        _action.Range = Range;
+        _action.Pattern = Pattern;
+        NextEvent?.Invoke(this, _action);
     }
 
     private void FolderSelected(string? obj)
@@ -38,8 +51,11 @@ public class RangeActionViewModel : ObservableObject
     }
 
     public event EventHandler<PreFlopAction> NextEvent;
+    public event EventHandler CompleteEvent;
     public ICommand FolderSelectedCommand { get; set; }
     public ICommand NextCommand { get; set; }
+    public ICommand CompleteCommand { get; set; }
+    
 
     public PreFlopAction Action
     {
@@ -71,7 +87,13 @@ public class RangeActionViewModel : ObservableObject
     public string BetSizing
     {
         get => _betSizing;
-        set => SetProperty(ref _betSizing, value);
+        set
+        {
+            if (decimal.TryParse(value,out var dec))
+            {
+                SetProperty(ref _betSizing, value);
+            }
+        }
     }
 
     public string Range
@@ -112,7 +134,7 @@ public class RangeActionViewModel : ObservableObject
     public void NextAction(PreFlopAction action, int actualNumber, int overAllNumber)
     {
         Action = action;
-        BetSizing = action.BetSizing.ToString();
+        BetSizing = action.BetSizing.ToString(CultureInfo.InvariantCulture);
         Pattern = action.Pattern;
         Range = action.Range;
         Name = action.Name;

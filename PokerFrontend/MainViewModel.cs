@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -7,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using PokerFrontend.Business;
 using PokerFrontend.Infrastructure.Enums;
 using PokerFrontend.ViewModel;
+using PokerFrontend.ViewModel.HandHistories;
 using PokerFrontend.ViewModel.Ranges.Add;
 
 namespace PokerFrontend
@@ -16,13 +18,14 @@ namespace PokerFrontend
         private object _selectedViewModel;
 
         private SideBarViewModel _sideBarViewModel;
-        private readonly CreateRangesViewModel createRangesViewModel;
+        private readonly CreateRangesViewModel _createRangesViewModel;
+        private readonly CreateViewModel _createViewModel;
 
-
-        public MainViewModel()
+        public MainViewModel(CreateRangesViewModel createRangesViewModel, CreateViewModel createViewModel)
         {
             _sideBarViewModel = new SideBarViewModel();
-            createRangesViewModel = new CreateRangesViewModel();
+            _createRangesViewModel = createRangesViewModel;
+            _createViewModel = createViewModel;
             _sideBarViewModel.NavigationEvent += SetNavigation;
 
         }
@@ -32,9 +35,13 @@ namespace PokerFrontend
             switch (e)
             {
                 case NavigationEnum.CreateRange:
-                    SelectedViewModel = createRangesViewModel;
+                    SelectedViewModel = _createRangesViewModel;
                     break;
-                
+                case NavigationEnum.CreateHandHistories:
+                    _createViewModel.Initialize();
+                    SelectedViewModel = _createViewModel;
+                    break;
+
             }
         }
 

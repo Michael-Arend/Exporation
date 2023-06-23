@@ -6,26 +6,44 @@ namespace PokerLibrary.Business;
 
 public class GameBusinessHandler : GameBusinessHandler.IGameBusinessHandler
 {
-    public void Play(IEnumerable<HandRange> ranges, int handAmount, string baseCFRLocation, string solverPath, string handHistoryPath)
+    private bool abort;
+    private SolverConnection _solver;
+
+    public GameBusinessHandler(string solverPath)
     {
-        var solver = new SolverConnection(solverPath);
+        this.abort = false;
+        this._solver = new SolverConnection(solverPath);
+    }
+
+    public void Stop()
+    {
+        abort = true;
+        CurrentDomainProcessExit();
+        SendMessage("Process stopped.");
+      
+    }
+    void CurrentDomainProcessExit()
+    {
+        _solver.Disconnect();
+        SendMessage("Solver stopped.");
+    }
 
 
-        AppDomain.CurrentDomain.ProcessExit += (i, p) => CurrentDomainProcessExit(solver);
 
-        static void CurrentDomainProcessExit(ISolverConnection s)
-        {
-            s.Disconnect();
-            SendMessage("Solver stopped.");
-        }
+    public async Task Play(IEnumerable<HandRange> ranges, int handAmount, string baseCFRLocation, string handHistoryPath)
+    {
+        abort = false;
+        AppDomain.CurrentDomain.ProcessExit += (i, p) => CurrentDomainProcessExit();
 
+    
 
         var historyBuilder = new HistoryBuilder.HistoryBuilder();
         var sw = new Stopwatch();
         sw.Start();
-        for (var i = 0; i < handAmount; i++)
+        var currentHand = 0;
+        while (currentHand < handAmount && !abort)
         {
-            if (i % 100 == 0) SendMessage($"running time: {sw.Elapsed.ToString()}");
+            if (currentHand % 100 == 0) SendMessage($"running time: {sw.Elapsed.ToString()}");
             var round = new Round(0.25m, 0.5m);
             historyBuilder.BuildHeader(round);
             try
@@ -35,13 +53,13 @@ public class GameBusinessHandler : GameBusinessHandler.IGameBusinessHandler
             catch (KeyNotFoundException e)
             {
                 SendMessage($"Betting Pattern not found: {e.Message}");
-                i--;
+                currentHand--;
                 historyBuilder.Reset();
                 continue;
             }
             catch (Exception)
             {
-                i--;
+                currentHand--;
                 continue;
             }
 
@@ -51,30 +69,36 @@ public class GameBusinessHandler : GameBusinessHandler.IGameBusinessHandler
                 switch (round.PlayersInHand.Count)
                 {
                     case 1:
-                        SendMessage($"Hand History {i}/{handAmount} created");
+                        SendMessage($"Hand History {currentHand}/{handAmount} created");
+                        currentHand++;
                         break;
                     case 2:
 
 
-                        PostFlopBusinessHandler.PlayPostFlop(round, historyBuilder, solver, baseCFRLocation);
+                        PostFlopBusinessHandler.PlayPostFlop(round, historyBuilder, _solver, baseCFRLocation);
                         historyBuilder.SaveHistoryToFile(handHistoryPath);
-                        SendMessage($"Hand History {i}/{handAmount} created");
+                        SendMessage($"Hand History {currentHand}/{handAmount} created");
+                        currentHand++;
                         break;
 
                     case > 2:
                         SendMessage($"More than one Player:  {round.BettingPattern}");
-                        i--;
+                        currentHand--;
                         break;
                 }
             }
+
             catch (Exception)
             {
                 // ignored
+
             }
             finally
             {
                 historyBuilder.Reset();
             }
+
+     
         }
     }
 
@@ -87,6 +111,6 @@ public class GameBusinessHandler : GameBusinessHandler.IGameBusinessHandler
 
     public interface IGameBusinessHandler
     {
-        void Play(IEnumerable<HandRange> ranges, int handAmount, string baseCFRLocation, string solverPath, string handHistoryPath);
+        Task Play(IEnumerable<HandRange> ranges, int handAmount, string baseCFRLocation,  string handHistoryPath);
     }
 }

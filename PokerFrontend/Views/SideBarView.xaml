@@ -23,8 +23,8 @@
     </UserControl.Resources>
     <Grid>
         
-        <GroupBox MinWidth="{adonisUi:Space 25}"
-                  Padding="{adonisUi:Space 0, 1, 0, 0}">
+        <GroupBox MinWidth="25"
+                  Padding="0 10 0 0 ">
 
             <Grid Margin="5" VerticalAlignment="Top">
                 <Grid.RowDefinitions>
@@ -38,7 +38,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="{adonisUi:Space 2}"/>
+                        <RowDefinition Height="20"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Ranges Setup"
@@ -47,20 +47,20 @@
                     <StackPanel Grid.Row="1"
                                       >
 
-                        <Button Margin="{adonisUi:Space 1}" Padding="{adonisUi:Space 1}" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.CreateRange}">
+                        <Button Margin="10" Padding="10" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.CreateRange}">
                             <TextBlock Text="Add New Ranges"
                                        VerticalAlignment="Center"
-                                       Margin="{adonisUi:Space 0, 0, 1, 0}"/>
+                                      />
                         </Button>
-                        <Button Margin="{adonisUi:Space 1}" Padding="{adonisUi:Space 1}" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.EditRanges}">
+                        <Button Margin="10" Padding="10" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.EditRanges}">
                             <TextBlock Text="Edit Ranges"
                                        VerticalAlignment="Center"
-                                       Margin="{adonisUi:Space 0, 0, 1, 0}"/>
+                                      />
                         </Button>
-                        <Button Margin="{adonisUi:Space 1}" Padding="{adonisUi:Space 1}" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.DeleteRanges}">
+                        <Button Margin="10" Padding="10" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.DeleteRanges}">
                             <TextBlock Text="Add New Ranges"
                                        VerticalAlignment="Center"
-                                       Margin="{adonisUi:Space 0, 0, 1, 0}"/>
+                                      />
                         </Button>
 
                     </StackPanel>
@@ -71,7 +71,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="{adonisUi:Space 2}"/>
+                        <RowDefinition Height="20"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Create Hand Histories"
@@ -80,10 +80,10 @@
                     <StackPanel Grid.Row="1"
                     >
 
-                        <Button Margin="{adonisUi:Space 1}" Padding="{adonisUi:Space 1}" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.CreateHandHistories}" >
+                        <Button Margin="10" Padding="10" Command="{Binding NavigationCommand}" CommandParameter="{x:Static enums:NavigationEnum.CreateHandHistories}" >
                             <TextBlock Text="Create"
                                        VerticalAlignment="Center"
-                                       Margin="{adonisUi:Space 0, 0, 1, 0}"/>
+                                       Margin="0 0 10 0"/>
                         </Button>
 
                     </StackPanel>
