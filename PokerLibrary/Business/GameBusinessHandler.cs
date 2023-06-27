@@ -40,7 +40,7 @@ public class GameBusinessHandler : GameBusinessHandler.IGameBusinessHandler
         var historyBuilder = new HistoryBuilder.HistoryBuilder();
         var sw = new Stopwatch();
         sw.Start();
-        var currentHand = 0;
+        var currentHand = 1;
         while (currentHand < handAmount && !abort)
         {
             if (currentHand % 100 == 0) SendMessage($"running time: {sw.Elapsed.ToString()}");

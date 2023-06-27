@@ -116,24 +116,25 @@ public class HistoryBuilder
         _builder.AppendLine($"{player.Name}: checks");
     }
 
-    public void HandleWin(Player? player, decimal returnAmount, Round round, bool withShowDown)
+    public void HandleWin( decimal returnAmount, Round round, bool withShowDown)
     {
+        var winner = round.PlayersInHand;
         if (returnAmount > 0)
         {
             var returnString = (returnAmount * round.BigBlind).ToString("0.00").Replace(",", ".");
-            _builder.AppendLine($"Uncalled bet (${returnString}) returned to {player.Name}");
+            _builder.AppendLine($"Uncalled bet (${returnString}) returned to {winner.First()?.Name}");
         }
 
         var potString = (round.Pot * round.BigBlind - returnAmount * round.BigBlind).ToString("0.00").Replace(",", ".");
 
         if (withShowDown)
         {
-            HandleWinShowdown(round.PlayersInHand.First(), round.PlayersInHand.Last(), round.Board, round);
+            winner = HandleWinShowdown(round.PlayersInHand.First(), round.PlayersInHand.Last(), round.Board, round).ToList() ?? winner;
         }
         else
         {
-            _builder.AppendLine($"{player.Name} collected ${potString} from pot");
-            _builder.AppendLine($"{player.Name}: doesn´t show hand");
+            _builder.AppendLine($"{winner.First()?.Name} collected ${potString} from pot");
+            _builder.AppendLine($"{winner.First()?.Name}: doesn´t show hand");
         }
 
         _builder.AppendLine("*** SUMMARY ***");
@@ -153,6 +154,7 @@ public class HistoryBuilder
         var seat = 1;
         foreach (var p in round.Players)
         {
+            var isWinner = winner.Contains( p );
             var posString = p.Position == Position.BTN ? "(button) " :
                 p.Position == Position.SB ? "(small blind) " :
                 p.Position == Position.BB ? "(big blind) " : "";
@@ -166,7 +168,7 @@ public class HistoryBuilder
                 _builder.AppendLine(
                     $"Seat {seat}: {p.Name} {posString}folded {StreetToString(p.MaxStreetReached)}{didNotBet}");
             }
-            else if (p.Name == player.Name)
+            else if (isWinner)
             {
                 if (withShowDown)
                 {
@@ -178,10 +180,10 @@ public class HistoryBuilder
                 }
                 else
                 {
-                    _builder.AppendLine($"Seat {seat}: {player.Name} {posString}collected ${potString}");
+                    _builder.AppendLine($"Seat {seat}: {p.Name} {posString}collected ${potString}");
                 }
             }
-            else if (p.Name != player.Name)
+            else if (!isWinner)
             {
                 var playerHand = round.Board.ToList();
                 playerHand.AddRange(new List<Card> { p.Hand.Card1, p.Hand.Card2 });
@@ -196,7 +198,7 @@ public class HistoryBuilder
         _builder.AppendLine();
     }
 
-    private void HandleWinShowdown(Player playerOne, Player playerTwo, List<Card> board, Round round)
+    private IEnumerable<Player> HandleWinShowdown(Player playerOne, Player playerTwo, List<Card> board, Round round)
     {
         var playerOneHand = board.ToList();
         playerOneHand.AddRange(new List<Card> { playerOne.Hand.Card1, playerOne.Hand.Card2 });
@@ -207,25 +209,25 @@ public class HistoryBuilder
         _builder.AppendLine("*** SHOW DOWN ***");
         _builder.AppendLine($"{playerOne.Name}: shows [{playerOne.Hand.GetStringFromHand()}] ({resultPlayer1.Message})");
         _builder.AppendLine($"{playerTwo.Name}: shows [{playerTwo.Hand.GetStringFromHand()}] ({resultPlayer2.Message})");
-
+        var potString = "";
         if (resultPlayer1.Rating > resultPlayer2.Rating)
         {
-            var potString = (round.Pot * round.BigBlind).ToString("0.00").Replace(",", ".");
+             potString = (round.Pot * round.BigBlind).ToString("0.00").Replace(",", ".");
             _builder.AppendLine($"{playerOne.Name} collected (${potString}) from the pot");
+            return new List<Player> { playerOne };
         }
 
         if (resultPlayer1.Rating < resultPlayer2.Rating)
         {
-            var potString = (round.Pot * round.BigBlind).ToString("0.00").Replace(",", ".");
+            potString = (round.Pot * round.BigBlind).ToString("0.00").Replace(",", ".");
             _builder.AppendLine($"{playerTwo.Name} collected (${potString}) from the pot");
+            return new List<Player> { playerTwo };
         }
-
-        if (resultPlayer1.Rating == resultPlayer2.Rating)
-        {
-            var potString = (round.Pot / 2 * round.BigBlind).ToString("0.00").Replace(",", ".");
+             potString = (round.Pot / 2 * round.BigBlind).ToString("0.00").Replace(",", ".");
             _builder.AppendLine($"{playerOne.Name} collected (${potString}) from the pot");
             _builder.AppendLine($"{playerTwo.Name} collected (${potString}) from the pot");
-        }
+            return new List<Player> { playerOne,playerTwo };
+        
     }
 
 

@@ -35,7 +35,7 @@ internal  class PostFlopBusinessHandler
                 ref solverConversion);
         }
 
-        builder.HandleWin(round.PlayersInHand.First(), round.PlayersInHand.Count > 1 ? 0 : returnAmount, round,
+        builder.HandleWin( round.PlayersInHand.Count > 1 ? 0 : returnAmount, round,
             round.PlayersInHand.Count > 1);
         return round;
     }

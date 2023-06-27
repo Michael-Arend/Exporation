@@ -52,7 +52,7 @@ internal class PreFlopBusinessHandler
         }
 
         if (round.PlayersInHand.Count == 1)
-            builder.HandleWin(round.PlayersInHand.First(),
+            builder.HandleWin(
                 latestRaiseAmount, round, false);
 
         round.PlayersInHand.ForEach(x =>

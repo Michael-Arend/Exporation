@@ -17,7 +17,7 @@ namespace Poker.Pio.Util
         private static bool running;
 
 
-        public static void Solve(SolverConnection solver, string savePath, int seconds = 90)
+        public static void Solve(SolverConnection solver, string savePath, int seconds = 600)
         {
             try
             {

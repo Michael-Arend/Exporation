@@ -37,7 +37,8 @@ namespace PokerFrontend.Business
         public PreFlopRange GetPreFlopRangeById(Guid id)
         {
             var data = File.ReadAllText(rangesFile);
-            var ranges = JsonSerializer.Deserialize<IEnumerable<PreFlopRange>>(data);
+            var ranges = String.IsNullOrEmpty(data) ? new List<PreFlopRange>() : JsonSerializer.Deserialize<List<PreFlopRange>>(data);
+
             var range = ranges?.FirstOrDefault(x => x.Id == id);
             if (range == null)
             {
@@ -49,8 +50,9 @@ namespace PokerFrontend.Business
         public IEnumerable<PreFlopRange> GetPreFlopRanges()
         {
             var data = File.ReadAllText(rangesFile);
-            var ranges = JsonSerializer.Deserialize<IEnumerable<PreFlopRange>>(data);
-          
+            var ranges = String.IsNullOrEmpty(data) ? new List<PreFlopRange>() : JsonSerializer.Deserialize<List<PreFlopRange>>(data);
+
+
             if (ranges == null)
             {
                 throw new KeyNotFoundException();

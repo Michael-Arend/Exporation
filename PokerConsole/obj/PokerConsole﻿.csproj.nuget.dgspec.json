@@ -1,36 +1,35 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projects\\Poker\\PokerConsole\\PokerConsole﻿.csproj": {}
+    "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerConsole\\PokerConsole﻿.csproj": {}
   },
   "projects": {
-    "C:\\Projects\\Poker\\PokerConsole\\PokerConsole﻿.csproj": {
+    "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerConsole\\PokerConsole﻿.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\Poker\\PokerConsole\\PokerConsole﻿.csproj",
+        "projectUniqueName": "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerConsole\\PokerConsole﻿.csproj",
         "projectName": "PokerConsole﻿",
-        "projectPath": "C:\\Projects\\Poker\\PokerConsole\\PokerConsole﻿.csproj",
-        "packagesPath": "C:\\Users\\marend.ARTISOAG\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\Poker\\PokerConsole\\obj\\",
+        "projectPath": "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerConsole\\PokerConsole﻿.csproj",
+        "packagesPath": "C:\\Users\\michaelarend\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerConsole\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\marend.ARTISOAG\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\michaelarend\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {},
-          "https://pkgs.dev.azure.com/sartorius/_packaging/sartorius/nuget/v3/index.json": {},
-          "https://pkgs.dev.azure.com/sartorius/lps_labos-ops/_packaging/Ingenix/nuget/v3/index.json": {}
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Projects\\Poker\\PokerLibrary\\PokerLibrary.csproj": {
-                "projectPath": "C:\\Projects\\Poker\\PokerLibrary\\PokerLibrary.csproj"
+              "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerLibrary\\PokerLibrary.csproj": {
+                "projectPath": "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerLibrary\\PokerLibrary.csproj"
               }
             }
           }
@@ -50,7 +49,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -59,30 +59,29 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Projects\\Poker\\PokerLibrary\\PokerLibrary.csproj": {
+    "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerLibrary\\PokerLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\Poker\\PokerLibrary\\PokerLibrary.csproj",
+        "projectUniqueName": "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerLibrary\\PokerLibrary.csproj",
         "projectName": "PokerLibrary",
-        "projectPath": "C:\\Projects\\Poker\\PokerLibrary\\PokerLibrary.csproj",
-        "packagesPath": "C:\\Users\\marend.ARTISOAG\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\Poker\\PokerLibrary\\obj\\",
+        "projectPath": "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerLibrary\\PokerLibrary.csproj",
+        "packagesPath": "C:\\Users\\michaelarend\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\michaelarend\\source\\repos\\Poker2\\PokerLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\marend.ARTISOAG\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\michaelarend\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {},
-          "https://pkgs.dev.azure.com/sartorius/_packaging/sartorius/nuget/v3/index.json": {},
-          "https://pkgs.dev.azure.com/sartorius/lps_labos-ops/_packaging/Ingenix/nuget/v3/index.json": {}
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
@@ -105,7 +104,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -114,7 +114,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

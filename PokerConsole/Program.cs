@@ -2,7 +2,7 @@
 using Poker.Data;
 using PokerLibrary.Business;
 
-var gameHandler = new GameBusinessHandler();
+var gameHandler = new GameBusinessHandler(@"C:\PioSolver\PioSOLVER2-pro.exe");
 GameBusinessHandler.NewMessage += GameBusinessHandlerNewMessage;
 
 void GameBusinessHandlerNewMessage(object? sender, string e)
@@ -11,9 +11,10 @@ void GameBusinessHandlerNewMessage(object? sender, string e)
 }
 
 var handAmount = Console.ReadLine();
-if (Int16.TryParse(handAmount, out var hands))
+if (Int32.TryParse(handAmount, out var hands))
 {
-    gameHandler.Play(CarrotsRanges.GetRanges(), hands, @"F:\", @"C:\PioSolver\PioSOLVER2-pro.exe", @"C:\PioSolver\hh.txt");
+ 
+    await gameHandler.Play(CarrotsRanges.GetRanges(), hands, @"W:",  @"C:\PioSolver\hh.txt");
 }
 
 

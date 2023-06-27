@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Projects\Poker\PokerFrontend\obj\Debug\net6.0-windows\
+C:\Users\michaelarend\source\repos\Poker2\PokerFrontend\obj\Debug\net6.0-windows\
 PokerFrontend
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\Projects\Poker\PokerFrontend\App.xaml
+C:\Users\michaelarend\source\repos\Poker2\PokerFrontend\App.xaml
 11-211847499
 
 2616285741
-213-470178176
+213-1067961990
 MainWindow.xaml;Views\HandHistories\CreateView.xaml;Views\Ranges\Add\CreateRangesView.xaml;Views\Ranges\Add\RangeActionView.xaml;Views\Ranges\Add\RangeBasicInformationView.xaml;Views\SideBarView.xaml;Views\Styles\Colors.xaml;Views\Styles\ControlReferenceSectionStyle.xaml;Views\Styles\ItemGroupLabelStyle.xaml;Views\Styles\MainHeader.xaml;Views\Styles\TextBox.xaml;
 
-False
+True
 
