@@ -87,7 +87,7 @@ internal  class PostFlopBusinessHandler
             {
                 decision = GetDecision(round.PlayerToAct, solver, ref nodeString, solverConversion, toCallAmount > 0);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 GameBusinessHandler.SendMessage($"Tree not Found: {treeFile + treeString + ".cfr"}");
                 SaveMissingSolves($"{treeFile + treeString + ".cfr"}");
@@ -186,7 +186,7 @@ internal  class PostFlopBusinessHandler
         Dictionary<CardColor, CardColor> solverConversion, bool hasOpenCall)
     {
         var options = StrategyUtil.GetOptions(solver, nodeString);
-        var handString = player.Hand.Convert(solverConversion).GetStringFromHandSorted();
+        var handString = player.Hand.Convert(solverConversion).GetSortedStringFromHand();
         var strategy = StrategyUtil.GetStrategies(solver, nodeString).FirstOrDefault(x => x.Contains(handString));
         var selectedOption = "";
         if (strategy != null)

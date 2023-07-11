@@ -45,7 +45,7 @@ internal class ResultBusinessHandler
             dec = dec * 100;
         }
 
-        return new Result(rating, ResultKind.HighCard, $"high card, {cards.First().Value}");
+        return new Result(rating, ResultKind.HighCard, $"high card {cards.First().Value}");
     }
 
 
@@ -129,7 +129,8 @@ internal class ResultBusinessHandler
         var rating = 3 + (decimal)oneList.Key / 100;
         cards.Where(x => x.Value != oneList.Key).OrderByDescending(x => x.Value).Take(2)
             .Select(x => rating += (decimal)x.Value / 10000);
-        return new Result(rating, ResultKind.ThreeOfAKind, $"three of a kind, {oneList.Key.ToString()}s");
+        var ending =  oneList.Key.ToString() == "six" ? "es" : "s" ;
+        return new Result(rating, ResultKind.ThreeOfAKind, $"three of a kind, {oneList.Key.ToString()}{ending}");
     }
 
     private static Result TwoPair(IEnumerable<Card> cards)

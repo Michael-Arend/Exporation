@@ -17,7 +17,7 @@ namespace Poker.Pio.Util
         private static bool running;
 
 
-        public static void Solve(SolverConnection solver, string savePath, int seconds = 600)
+        public static async Task Solve(SolverConnection solver, string savePath, int seconds = 600)
         {
             try
             {
@@ -26,9 +26,19 @@ namespace Poker.Pio.Util
                 running = true;
                 var result = solver.GetResponseFromSolver($"go {seconds} seconds");
                 solver.LogEvent += Solver_LogEvent;
+                var aTimer = new System.Timers.Timer();
+                aTimer.Interval = seconds*1000 + 5000;
+                aTimer.Elapsed += (i, o) =>
+                {
+                    running = false;
+                    GameBusinessHandler.SendMessage("Error in Solver.");
+                };
+                aTimer.AutoReset = true;
+                aTimer.Enabled = true;
                 while (running)
                 {
                 }
+                aTimer.Enabled = false;
                 GameBusinessHandler.SendMessage("Manually solving tree completed");
                 solver.LogEvent -= Solver_LogEvent;
                 if (!string.IsNullOrEmpty(savePath))

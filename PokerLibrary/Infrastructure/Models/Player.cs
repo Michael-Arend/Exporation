@@ -8,6 +8,7 @@ public class Player
     public string Name { get; set; }
     public Position Position { get; set; }
     public decimal Chips { get; set; }
+    public decimal MoneyWon { get; set; }
     public bool PlayerInHand { get; set; } = true;
 
     public decimal ChipsInvestedInRound { get; set; }

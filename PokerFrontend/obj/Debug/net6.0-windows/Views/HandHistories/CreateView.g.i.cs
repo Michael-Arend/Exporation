@@ -57,7 +57,7 @@ namespace PokerFrontend.Views.HandHistories {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PokerFrontend;component/views/handhistories/createview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PokerFrontend;V1.0.0.0;component/views/handhistories/createview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Views\HandHistories\CreateView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

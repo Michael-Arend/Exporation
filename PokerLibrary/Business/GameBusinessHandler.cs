@@ -41,11 +41,12 @@ public class GameBusinessHandler : GameBusinessHandler.IGameBusinessHandler
         var sw = new Stopwatch();
         sw.Start();
         var currentHand = 1;
+        var rdm = new Random();
+        var baseNumber = rdm.Next(0, 1000000).ToString("D6");
         while (currentHand < handAmount && !abort)
         {
-            if (currentHand % 100 == 0) SendMessage($"running time: {sw.Elapsed.ToString()}");
             var round = new Round(0.25m, 0.5m);
-            historyBuilder.BuildHeader(round);
+            historyBuilder.BuildHeader(round, currentHand, baseNumber);
             try
             {
                 round = PreFlopBusinessHandler.PlayPreFlop(round, historyBuilder, ranges);
@@ -69,15 +70,31 @@ public class GameBusinessHandler : GameBusinessHandler.IGameBusinessHandler
                 switch (round.PlayersInHand.Count)
                 {
                     case 1:
+                        var amountInFile = historyBuilder.SaveHistoryToFile(handHistoryPath, currentHand%100 == 0);
                         SendMessage($"Hand History {currentHand}/{handAmount} created");
+                       
+                        if (amountInFile > 0 )
+                        {
+                            sendStatus(amountInFile);
+                            if(amountInFile == 1000)
+                            historyBuilder.CreateNewHistoryFile(handHistoryPath);
+                        }
+
                         currentHand++;
                         break;
                     case 2:
 
 
                         PostFlopBusinessHandler.PlayPostFlop(round, historyBuilder, _solver, baseCFRLocation);
-                        historyBuilder.SaveHistoryToFile(handHistoryPath);
+                        amountInFile = historyBuilder.SaveHistoryToFile(handHistoryPath,currentHand % 100 == 0);
                         SendMessage($"Hand History {currentHand}/{handAmount} created");
+                        if(amountInFile >0 )
+                        {
+                            sendStatus(amountInFile);
+                            if (amountInFile == 1000)
+                                historyBuilder.CreateNewHistoryFile(handHistoryPath);
+
+                        }
                         currentHand++;
                         break;
 
@@ -98,7 +115,14 @@ public class GameBusinessHandler : GameBusinessHandler.IGameBusinessHandler
                 historyBuilder.Reset();
             }
 
-     
+            void sendStatus(int amountInFile)
+            {
+                SendMessage($"");
+            SendMessage($"Hand Histories in File: {amountInFile}");
+            SendMessage($"running time: {sw.Elapsed.Hours}:{sw.Elapsed.Minutes.ToString("00")}:{sw.Elapsed.Seconds.ToString("00")}h");
+            SendMessage($"");
+            }
+
         }
     }
 

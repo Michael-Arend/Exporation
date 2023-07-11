@@ -14,7 +14,7 @@ var handAmount = Console.ReadLine();
 if (Int32.TryParse(handAmount, out var hands))
 {
  
-    await gameHandler.Play(CarrotsRanges.GetRanges(), hands, @"W:",  @"C:\PioSolver\hh.txt");
+    await gameHandler.Play(CarrotsRanges.GetRanges(), hands, @"s:",  @"C:\PioSolver\hh.txt");
 }
 
 

@@ -17,17 +17,23 @@ public class HistoryBuilder
     public void Reset()
     {
         _builder = new StringBuilder();
+
     }
 
-    public void BuildHeader(Round round)
+    public void AppendNewString(string str)
+    {
+        _builder.Append(str);
+    }
+
+    public void BuildHeader(Round round, int currentHand, string baseNumber)
     {
         var rdm = new Random();
-        var handString = rdm.Next(0, 10000000).ToString("D7");
-        handString += rdm.Next(0, 1000000).ToString("D6");
 
-        var time = DateTime.Now;
+        baseNumber += currentHand.ToString("D6");
+
+        var time = DateTime.Now.AddSeconds(currentHand * 20).AddDays(-1);
         _builder.AppendLine(
-            $"PokerStars Zoom Hand #{handString}:  Hold'em No Limit (${(round.BigBlind / 2).ToString("0.00").Replace(",", ".")}/${round.BigBlind.ToString("0.00").Replace(",", ".")}) - {time.Year}/{time.Month}/{time.Day} {time.Hour}:{time.Minute.ToString("00")}:{time.Second.ToString("00")} ET");
+            $"PokerStars Zoom Hand #{baseNumber}:  Hold'em No Limit (${(round.BigBlind / 2).ToString("0.00").Replace(",", ".")}/${round.BigBlind.ToString("0.00").Replace(",", ".")}) - {time.Year}/{time.Month.ToString("00")}/{time.Day.ToString("00")} {time.Hour}:{time.Minute.ToString("00")}:{time.Second.ToString("00")} CET");
         _builder.AppendLine("Table 'Halley' 6-max Seat #6 is the button");
 
 
@@ -44,15 +50,16 @@ public class HistoryBuilder
         _builder.AppendLine($"{sb.Name}: posts small blind ${round.SmallBlind.ToString("0.00").Replace(",", ".")}");
         _builder.AppendLine($"{bb.Name}: posts big blind ${round.BigBlind.ToString("0.00").Replace(",", ".")}");
         _builder.AppendLine("*** HOLE CARDS ***");
-        foreach (var player in round.Players)
-            _builder.AppendLine($"Dealt to {player.Name} [{player.Hand.GetStringFromHand().Insert(2, " ")}]");
+        foreach (var player in round.Players.Where(x => x.Name == "HeroGto"))
+            _builder.AppendLine($"Dealt to {player.Name} [{player.Hand.GetStringFromHand()}]");
     }
 
-    public void SaveHistoryToFile(string path)
+    public int SaveHistoryToFile(string path, bool sendOverallAmount = false)
     {
-        var contents = "";
+        var contents = " ";
         ; // path to file
         if (File.Exists(path)) contents = File.ReadAllText(path);
+        var amount = sendOverallAmount ? contents.Split("PokerStars").Count() + 1 : 0;
 
         using (var fs = File.Create(path))
         {
@@ -63,15 +70,27 @@ public class HistoryBuilder
                 _builder.AppendLine();
             }
 
-            var info = new UTF8Encoding(true).GetBytes(contents + _builder);
+            var info = new UTF8Encoding(true).GetBytes(contents.Substring(0, contents.Length - 1) + _builder);
             fs.Write(info, 0, info.Length);
 
             // writing data in bytes already
             byte[] data = { 0x0 };
             fs.Write(data, 0, data.Length);
         }
+        return amount;
+
     }
 
+    public void CreateNewHistoryFile(string path)
+    {
+        var purePath = path.Substring(path.Length - 5);
+        var i = 1;
+
+        while (File.Exists(purePath + i + ".txt")){
+            i++;
+        }
+        System.IO.File.Move("path", purePath + i + ".txt");
+    }
     public void PlayerRaises(Player player, decimal difference, decimal overall, Round round)
     {
         var overallString = (overall * round.BigBlind).ToString("0.00").Replace(",", ".");
@@ -134,7 +153,8 @@ public class HistoryBuilder
         else
         {
             _builder.AppendLine($"{winner.First()?.Name} collected ${potString} from pot");
-            _builder.AppendLine($"{winner.First()?.Name}: doesn´t show hand");
+            _builder.AppendLine($"{winner.First()?.Name}: doesn't show hand");
+            winner.First().MoneyWon= round.Pot * round.BigBlind - returnAmount * round.BigBlind;
         }
 
         _builder.AppendLine("*** SUMMARY ***");
@@ -160,7 +180,7 @@ public class HistoryBuilder
                 p.Position == Position.BB ? "(big blind) " : "";
 
             var didNotBet = p.MaxStreetReached == Street.PreFlop && p.ChipsInvestedInRound == 0
-                ? " (didn´t bet)"
+                ? " (didn't bet)"
                 : "";
 
             if (!p.PlayerInHand)
@@ -176,11 +196,11 @@ public class HistoryBuilder
                     playerHand.AddRange(new List<Card> { p.Hand.Card1, p.Hand.Card2 });
                     var resultPlayer1 = ResultBusinessHandler.GetResultFromCards(playerHand);
                     _builder.AppendLine(
-                        $"Seat {seat}: {p.Name} {posString} showed [{p.Hand.GetStringFromHand()}] and won (${potString}) with {resultPlayer1.Message}");
+                        $"Seat {seat}: {p.Name} {posString}showed [{p.Hand.GetStringFromHand()}] and won (${p.MoneyWon}) with {resultPlayer1.Message}");
                 }
                 else
                 {
-                    _builder.AppendLine($"Seat {seat}: {p.Name} {posString}collected ${potString}");
+                    _builder.AppendLine($"Seat {seat}: {p.Name} {posString}collected (${p.MoneyWon})");
                 }
             }
             else if (!isWinner)
@@ -189,7 +209,7 @@ public class HistoryBuilder
                 playerHand.AddRange(new List<Card> { p.Hand.Card1, p.Hand.Card2 });
                 var resultPlayer1 = ResultBusinessHandler.GetResultFromCards(playerHand);
                 _builder.AppendLine(
-                    $"Seat {seat}: {p.Name} {posString} showed [{p.Hand.GetStringFromHand()}] and lost with {resultPlayer1.Message}");
+                    $"Seat {seat}: {p.Name} {posString}showed [{p.Hand.GetStringFromHand()}] and lost with {resultPlayer1.Message}");
             }
 
             seat++;
@@ -213,22 +233,37 @@ public class HistoryBuilder
         if (resultPlayer1.Rating > resultPlayer2.Rating)
         {
              potString = (round.Pot * round.BigBlind).ToString("0.00").Replace(",", ".");
-            _builder.AppendLine($"{playerOne.Name} collected (${potString}) from the pot");
+            playerOne.MoneyWon = round.Pot * round.BigBlind;
+            _builder.AppendLine($"{playerOne.Name} collected ${potString} from the pot");
             return new List<Player> { playerOne };
         }
 
         if (resultPlayer1.Rating < resultPlayer2.Rating)
         {
             potString = (round.Pot * round.BigBlind).ToString("0.00").Replace(",", ".");
-            _builder.AppendLine($"{playerTwo.Name} collected (${potString}) from the pot");
+            _builder.AppendLine($"{playerTwo.Name} collected ${potString} from the pot");
+            playerTwo.MoneyWon = round.Pot * round.BigBlind;
             return new List<Player> { playerTwo };
         }
-             potString = (round.Pot / 2 * round.BigBlind).ToString("0.00").Replace(",", ".");
-            _builder.AppendLine($"{playerOne.Name} collected (${potString}) from the pot");
-            _builder.AppendLine($"{playerTwo.Name} collected (${potString}) from the pot");
-            return new List<Player> { playerOne,playerTwo };
-        
+        return HandleSplitPot(playerOne, playerTwo, round);
+         
+
     }
+
+    private IEnumerable<Player> HandleSplitPot(Player playerOne, Player playerTwo, Round round)
+    {
+        var potCent = round.Pot * round.BigBlind * 100;
+        decimal roundHalf = Math.Floor(potCent / 2);
+        decimal OOPPlayer = potCent % 2 +roundHalf;
+        var IpString = (roundHalf /100).ToString("0.00").Replace(",", ".");
+        var OopString = (OOPPlayer / 100).ToString("0.00").Replace(",", ".");
+        _builder.AppendLine($"{playerOne.Name} collected (${IpString}) from the pot");
+        _builder.AppendLine($"{playerTwo.Name} collected (${OopString}) from the pot");
+        playerOne.MoneyWon = roundHalf / 100;
+        playerTwo.MoneyWon = OOPPlayer / 100;
+        return new List<Player> { playerOne, playerTwo };
+    }
+
 
 
     public string StreetToString(Street street)
@@ -236,7 +271,7 @@ public class HistoryBuilder
         switch (street)
         {
             case Street.PreFlop:
-                return "before the Flop";
+                return "before Flop";
             case Street.Flop:
                 return "on the Flop";
             case Street.Turn:

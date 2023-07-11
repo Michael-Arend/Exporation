@@ -86,7 +86,7 @@ internal class PreFlopBusinessHandler
         round.Pot += 1;
         round.PlayerToAct.ChipsInvestedInRound = 1;
         round.NextPlayer();
-        return (1, 0.5m);
+        return (0.5m, 1);
     }
 
     private static Decision GetDecision(Player player, string bettingPattern, out string? path, IEnumerable<HandRange> ranges)

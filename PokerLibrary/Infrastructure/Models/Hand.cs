@@ -17,24 +17,9 @@ namespace PokerLibrary.Infrastructure.Models
 
         public string GetStringFromHand()
         {
-            return $"{Card1.GetStringFromCard()}{Card2.GetStringFromCard()}";
+            return $"{Card1.GetStringFromCard()} {Card2.GetStringFromCard()}";
         }
 
-        public string GetStringFromHandSorted()
-        {
-            if (Card1.Value > Card2.Value)
-                return $"{Card1.GetStringFromCard()}{Card2.GetStringFromCard()}";
-
-            if (Card1.Value < Card2.Value)
-                return $"{Card2.GetStringFromCard()}{Card1.GetStringFromCard()}";
-
-            if (Card1.Color < Card2.Color)
-                return $"{Card1.GetStringFromCard()}{Card2.GetStringFromCard()}";
-
-            return $"{Card2.GetStringFromCard()}{Card1.GetStringFromCard()}";
-
-
-        }
 
 
 
